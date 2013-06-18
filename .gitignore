@@ -1,9 +1,9 @@
 #Object files and debugging jumbo
-ArcadeInterface\Release\*
-ArcadeInterface\Debug\*
+ArcadeInterface/Release/
+ArcadeInterface/Debug/
 
 #Don't feel like version controlling the debug build at this point.
-Debug\*
+Debug/
 
 #It's a waste of space and bandwidth to just git the other various 
 #VS files now as well. You get the source and an executable.
@@ -13,4 +13,4 @@ ArcadeInterface.sln
 ArcadeInterface.v11.suo
 *.user
 *.filters
-*.vcxproj
+*.vcxprojgit
