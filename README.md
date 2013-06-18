@@ -41,3 +41,14 @@ The interface has many properties that can be configured as well.
 * Tile configuration attribute names can be configured. (For teh lulz)
 * Even window blanking color can be personalized.
 
+Building from Source
+====================
+By creating your own Visual C++ project using this source code this repository loses about 60MB in baby fat.
+* Dump the source into a new, empty VC++ project.
+* Set up the Include and Library directories in the VC++ Directories property page to look at the lib, GL, 
+and bin directories.
+* List out all the *.lib files in the dependencies/lib directory in the Linker->Input->Additional Dependencies 
+property page.
+* Wrestle with all the crap GLEW gives everyone on their first try.
+* Do what you want with the assets to get the .exe to see them. I just leave them in the source directory 
+until I need to distribute.
