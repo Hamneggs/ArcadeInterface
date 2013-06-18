@@ -10,21 +10,21 @@ Features
 * Each tile can be extensively customized.
 * Low memory requirements(depending on tile images)
 * No platform-binding dependencies.
+* Smooth navigation and simple effects.
 * Uses OpenGL 2.0 to support a wide range of graphics hardware.
 
 Tile Customization
 =============
-An editor is included to construct Tile layouts. 
-------------------------------------------------
+<b>An editor is included to construct tile layouts.<b> 
 Each Tile has the following properties that can be modified.
 * Location, highlighted and un-highlighted sizes.
 * Whether or not it has a standard frame, is the first tile selected on startup, or if can be selected by the
 user.
-* Three seperate images are used to represent each tile--one that is displayed on the tilewhen it is 
+* Three seperate images are used to represent each tile--one that is displayed on the tile when it is 
 highlighted, one that is displayed in the background when the tile is highlighted, and one that is displayed
 on the tile when it is not highlighted.
 * All tiles have a game name and description. (Eh, but these are as-of-now useless.)
-* Each tile has four binding points that coorespond to the four cardinal directions that can be linked to any
+* Each tile has four binding points that coorespond to the four cardinal directions which can be linked to any
 other or no tile.
 
 Interface Customization
