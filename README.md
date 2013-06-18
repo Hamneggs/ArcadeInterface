@@ -6,7 +6,7 @@ A graphical user interface that allows a user to easily select a game on a multi
 Features
 ========
 * Tile based interface for easy and intuitive navigation.
-* Multiple Tile layers to allow multiple tile arrangements.
+* Multiple Tile layers to allow for multiple user-visible tile arrangements and easy sorting.
 * Each tile can be extensively customized.
 * Low memory requirements(depending on tile images)
 * No platform-binding dependencies.
@@ -33,7 +33,7 @@ The interface has many properties that can be configured as well.
 * Control mappings.
 * Sound effects.
 * Universal texture images, such as the UI overlay, tile frame, and exit warning images.
-* Transition time and shutdown time.
+* Transition and shutdown times.
 * Fullscreen rendering.
 * Window title, resolution and position.
 * The ability to display extended information about the tile loading process and shader linking and compiling.
