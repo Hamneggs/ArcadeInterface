@@ -2,15 +2,25 @@
 
 namespace input
 {
+	// We keep a vector of all the keys currently being pressed so it is
+	// easy to determine key combinations.
 	std::vector<unsigned char> keysPressed;
+
+	// We do the same with special keys.
 	std::vector<int> specialKeysPressed;
+
 	TileGrid * grid = NULL;
 	Background * bg;
 	Hud * hud = NULL;
 	UIConfig * c;
 
+	// The time the exit key combination was first pressed.
 	int timeExitPressed = 0;
 
+	/*
+	Initializes the data structures, application element references 
+	and config data of the input code.
+	*/
 	bool init(TileGrid * newGrid, Hud * newHUD, Background * newBG, UIConfig * newConfig)
 	{
 		grid = newGrid;
@@ -25,6 +35,9 @@ namespace input
 		return true;
 	}
 
+	/*
+	Adds a key to the internal key-pressed stack.
+	*/
 	bool addKey(unsigned char key)
 	{
 		for(unsigned int i = 0; i < keysPressed.size(); i++)
@@ -37,7 +50,10 @@ namespace input
 		keysPressed.push_back(key);
 		return true;
 	}
-
+	
+	/*
+	Adds a special key to the internal special key-pressed stack.
+	*/
 	bool addSpecialKey(int key)
 	{
 		for(unsigned int i = 0; i < specialKeysPressed.size(); i++)
@@ -50,7 +66,10 @@ namespace input
 		specialKeysPressed.push_back(key);
 		return true;
 	}
-
+	
+	/*
+	Removes a key from the internal key-pressed stack.
+	*/
 	bool removeKey(unsigned char key)
 	{
 		for(unsigned int i = 0; i < keysPressed.size(); i++)
@@ -63,7 +82,10 @@ namespace input
 		}
 		return false;
 	}
-
+	
+	/*
+	Removes a special key from the inernal special key-pressed stack.
+	*/
 	bool removeSpecialKey(unsigned int key)
 	{
 		for(unsigned int i = 0; i < specialKeysPressed.size(); i++)
@@ -77,6 +99,9 @@ namespace input
 		return false;
 	}
 
+	/*
+	Returns whether or not a given key is in the pressed-key stack.
+	*/
 	bool isKeyPressed(unsigned char key)
 	{
 		for(unsigned int i = 0; i < keysPressed.size(); i++)
@@ -88,6 +113,10 @@ namespace input
 		}
 		return false;
 	}
+	
+	/*
+	Returns whether or not a given special key is in the pressed-special key stack.
+	*/
 	bool isSpecialKeyPressed(unsigned int key)
 	{
 		for(unsigned int i = 0; i < specialKeysPressed.size(); i++)
@@ -99,7 +128,10 @@ namespace input
 		}
 		return false;
 	}
-
+	
+	/*
+	The function passed to GLUT as our keyPressed callback.
+	*/
 	void keyPressed(unsigned char key, int x, int y)
 	{
 		bool entered = addKey(key);
@@ -158,6 +190,9 @@ namespace input
 
 	}
 
+	/*
+	The function passed to GLUT as our specialKeyPressed callback.
+	*/
 	void specialPressed(int key, int x, int y)
 	{
 		bool entry = addSpecialKey(key);
@@ -182,11 +217,18 @@ namespace input
 		}
 	}
 	
+	/*
+	The function passed to GLUT as our keyReleased callback.
+	*/
 	void keyReleased(unsigned char key, int x, int y)
 	{
 		bool removed = removeKey(key);
 		hud->setWarning(false);
 	}
+
+	/*
+	The function passed to GLUT as our specialKeyReleased callback.
+	*/
 	void specialReleased(int key, int x, int y)
 	{
 		bool removed = removeSpecialKey(key);

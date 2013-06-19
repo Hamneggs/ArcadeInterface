@@ -1,5 +1,5 @@
 #pragma once
-#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS // I'm bloody tired of reading that strcpy is unsafe.
 #include <stdio.h>
 #include "Window.h"
 #include "Keyboard.h"

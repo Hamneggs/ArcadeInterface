@@ -6,7 +6,7 @@ config file, as well as the config file path.
 Stay safe and don't fuck with either.
 */
 
-#define CONFIG_FILE_PATH "config\\ui.xml"
+#define CONFIG_FILE_PATH "assets\\config\\ui.xml"
 //=====================================================
 #define LOAD_NODE			"loading"
 #define EXT_SHD_ATTR		"ext_shaders"

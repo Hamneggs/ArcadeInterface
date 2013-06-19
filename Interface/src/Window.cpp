@@ -111,11 +111,15 @@ namespace window
 		// Enable texturing.
 		glEnable(GL_TEXTURE_2D);
 
-		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glViewport(0, 0, c->x_res, c->y_res);
+		// Set the viewport to take up the entire window.
+		glViewport(0, 0, c->x_res/2, c->y_res);
+
+		// Pass in our callbacks.
 		glutDisplayFunc(render);
 		glutIdleFunc(render);
 		glutWindowStatusFunc(visibilityFunc);
+
+		// If everything's gone well up until this point, we can return true.
 		return true;
 	}
 
@@ -125,24 +129,35 @@ namespace window
 	*/
 	void render(void)
 	{
-		if(glutGetWindow() == 0)
-		{
-			return;
-		}
+		// If there is no window we don't need to render anything.
+		if(glutGetWindow() == 0) return;
+
+		// Update the FPS at the titlebar of the window.
 		updateFPS();
+
+		// Blank the screen.
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Render the background...
 		if(bg != NULL)
 		{
 			bg->render();
 		}
+
+		// Then the grid and all the Tiles atop that...
 		if(grid != NULL)
 		{
 			grid->render();
 		}
+
+		// And finally we render the HUD atop that to wrap everything up.
 		if(hud != NULL)
 		{
 			hud->render();
 		}
+
+		// Swap buffers. This prevents screen-tearing by blitting a complete framebuffer to the screen as fast as possible
+		// while the other is being operated on.
 		glutSwapBuffers();
 	}
 
@@ -190,11 +205,14 @@ namespace window
 	*/
 	void visibilityFunc(int state)
 	{
+		// If the window is finally fucking gone...
 		if(state == GLUT_NOT_VISIBLE)
 		{
+			// If the current Tile's state is above 1.0 (EXECUTE range) we execute the command.
+			// The UI halts until that call is returned, at which point we remake the window
+			// visible and set it to fullscreen if necessary.
 			if(grid->getCurrent()->getState() > 1.0)
 			{
-				
 				grid->getCurrent()->setState(ACTIVE);
 				printf("\ncommand: %s\n", grid->getCurrent()->getCommand());
 				system(grid->getCurrent()->getCommand());
@@ -211,7 +229,6 @@ namespace window
 	{
 		if(fullscreen && !full)
 		{
-			printf("X: %d, Y: %d \n", c->x_res, c->y_res);
 			glutReshapeWindow(c->x_res, c->y_res);
 			glutPositionWindow(c->win_x, c->win_y);
 			fullscreen = false;

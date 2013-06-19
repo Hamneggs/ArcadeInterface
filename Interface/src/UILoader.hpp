@@ -8,6 +8,9 @@
 #include <rapidxml.hpp>
 #include <rapidxml_utils.hpp>
 
+/*
+Determines whether or not the given c-string contains a whole number.
+*/
 bool inline isWholeNumber(char * n)
 {
 	for(unsigned int i = 0; i < strlen(n); i++)
@@ -19,10 +22,11 @@ bool inline isWholeNumber(char * n)
 	}
 	return true;
 }
+
 /*
 Loads tiles from an XML file created by the editor.
 */
-void inline loadTiles(TileGrid * grid, UIConfig * c, char * filename)
+void inline loadTiles(TileGrid * grid, UIConfig * c)
 {
 	for(unsigned int i = 0; i < c->paths.size(); i++)
 	{

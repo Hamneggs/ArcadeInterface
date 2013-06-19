@@ -6,6 +6,13 @@
 #include "const.h"
 #include "Tile.h"
 #include "UIConfig.h"
+
+/*
+This enumuration details the various states a Tile can be in.
+EXECUTE means a Tile has been marked to have its command executed.
+ACTIVE means that the Tile is the current, in-focus Tile.
+INACTIVE means that the Tile is not the current one.
+*/
 enum State
 {
 	EXECUTE = 2,
@@ -13,6 +20,9 @@ enum State
 	INACTIVE = 0
 };
 
+/*
+This enum is used to specify which neighbor binding point to access.
+*/
 enum Direction
 {
 	NORTH = 1,
@@ -322,8 +332,6 @@ private:
 	A reference to a config struct for animation and initialization.
 	*/
 	UIConfig * c;
-
-	void recreateWindow(void);
 };
 
 #endif

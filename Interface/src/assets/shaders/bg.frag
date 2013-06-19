@@ -54,7 +54,7 @@ vec2 animate(vec2 toAnimate)
 	float angle =  (float(time)-(period/2)) / period;
 	
 	// Manipulate the incoming vec2.
-	toAnimate.x += amplitude*sin(angle+(gl_FragCoord.y/period));
+	toAnimate.x += amplitude*sin(angle+(gl_FragCoord.y/(period/2)));
 	return toAnimate;
 }
 

@@ -20,10 +20,17 @@ required reference to a TileGrid. Also initializes the currentTime pointer.
 */
 bool Background::init(TileGrid * grid, UIConfig * c)
 {
+	// Initialize the vertex and UV buffers.
 	initBuffers();
+
+	// Internalize the grid reference.
 	this->grid = grid;
+
+	// Load and compile the two shaders for use.
 	vert.loadShader(c->bg_v, GL_VERTEX_SHADER, c->ext_shader_rep);
 	frag.loadShader(c->bg_f, GL_FRAGMENT_SHADER, c->ext_shader_rep);
+
+	// Create a shader program and link the two shaders into it.
 	program.createProgram();
 	program.attachShaderToProgram(&vert);
 	program.attachShaderToProgram(&frag);

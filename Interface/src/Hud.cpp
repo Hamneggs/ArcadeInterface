@@ -16,21 +16,30 @@ Initializes the HUD's UV and location buffers, as well as creates its shaders.
 */
 bool Hud::init(float x, float y, float sx, float sy, UIConfig * c)
 {
+
+	// Internalize all parameters.
 	this->x = x;
 	this->y = y;
 	this->sx = sx;
 	this->sy = sy;
+
+	// Initialize the vertex and UV buffers.
 	initBuffers();
 
+	// Initialize the isWarning flag to be false.
 	isWarning = false;
+
+	// Load the vertex and fragment shaders.
 	vert.loadShader(c->hud_v, GL_VERTEX_SHADER, c->ext_shader_rep);
 	frag.loadShader(c->hud_f, GL_FRAGMENT_SHADER, c->ext_shader_rep);
 
+	// Create a shader program and link the two shaders into it.
 	program.createProgram();
 	program.attachShaderToProgram(&vert);
 	program.attachShaderToProgram(&frag);
 	program.linkProgram();
 
+	// Load the Overlay image.
 	bool imageLoaded = false;
 	if(c->ovr_path != NULL)
 	{
@@ -47,6 +56,7 @@ bool Hud::init(float x, float y, float sx, float sy, UIConfig * c)
 		hudTexture.setSamplerParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	}
 
+	// Load the exit warning image.
 	if(c->exit_path != NULL)
 	{
 		if(c->ext_tile_rep) printf("\nPATH: %s\n", c->exit_path);
@@ -71,10 +81,12 @@ Renders the HUD.
 void Hud::render(void)
 {
 	program.useProgram();
-
+	
+	// If the warning flag is set we pass in the exit warning rather than the overlay.
 	if(isWarning) warning.bindTexture(0);
 	else hudTexture.bindTexture(0);
 
+	// Garner the location of the uniforms.
 	GLuint uniLoc;
 	uniLoc = glGetUniformLocation(program.getProgramID(), "location");
 	glUniform2f(uniLoc, x, y);

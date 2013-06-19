@@ -289,28 +289,48 @@ Shifts back a layer.
 */
 void TileGrid::shiftBackLayer(void)
 {
+	// If we are currently shifting Tiles we don't want to allow layer shifting.
 	if(curDir!=NONE)return;
+
+	// Decrement the current layer.
 	curLayer --;
+
+	// Wrap it at the edge case.
 	if(curLayer < 0) curLayer = layers.size()-1;
+
+	// If this layer has at least one Tile in it, we can shift the current Tile
+	// to the first one on the new layer.
 	if(layers[curLayer]->size()>0)
 	{
+		// Deactivate the previously current tile.
 		currentTile->setState(INACTIVE);
+
+		// Assign that Tile to be the previous Tile so we can have 
+		// consistent background switching.
 		previousTile = currentTile;
+
+		// Set the currentTile to the first tile of the new layer.
 		currentTile = layers[curLayer]->at(0);
-		previousTile = layers[curLayer]->at(0);
+
+		// Reset the current Tile.
 		currentTile->setState(INACTIVE);
 		currentTile->setState(ACTIVE);
+
+		// Set up the animation deltas so that the screen snaps to the new current Tile.
 		animDeltaX = (.5f-currentTile->getX())/c->anim_frames;
 		animDeltaY = (.5f-currentTile->getY())/c->anim_frames;
-		// Update the states of the Tiles.
+
+		// Update the states of the other Tiles.
 		for(unsigned int i = 0; i < layers[curLayer]->size(); i++)
 		{
 			layers[curLayer]->at(i)->setState(INACTIVE);
 		}
-		currentTile->setState(ACTIVE);
+
+		// Set the current direction to a none NONE value so that the animation handler does a job.
 		curDir=NORTH;
-		printf("Layer: %d\nP: %10s\nC:%10s\n", curLayer, previousTile->getName(), currentTile->getName());
 	}
+
+	// If there are no Tiles in this layer, we just set the current and previous tiles to NULL.
 	else
 	{
 		currentTile = NULL;
@@ -323,29 +343,49 @@ Shifts forward a layer.
 */
 void TileGrid::shiftForwardLayer(void)
 {
+
+	// Again, if we are changing Tiles we don't allow layer shifting.
 	if(curDir!=NONE)return;
+
+	// Increment the current layer.
 	curLayer ++;
+
+	// Wrap the current layer at this edge case.
 	curLayer%=layers.size();
+
+	// If this layer has at least one Tile in it, we can shift the current Tile
+	// to the first one on the new layer.
 	if(layers[curLayer]->size()>0)
 	{
+		// Deactivate the previously current tile.
 		currentTile->setState(INACTIVE);
+
+		// Assign that Tile to be the previous Tile so we can have 
+		// consistent background switching.
 		previousTile = currentTile;
+
+		// Set the currentTile to the first tile of the new layer.
 		currentTile = layers[curLayer]->at(0);
-		previousTile = layers[curLayer]->at(0);
+
+		// Reset the current Tile.
 		currentTile->setState(INACTIVE);
 		currentTile->setState(ACTIVE);
+
+		// Set up the animation deltas so that the screen snaps to the new current Tile.
 		animDeltaX = (.5f-currentTile->getX())/c->anim_frames;
 		animDeltaY = (.5f-currentTile->getY())/c->anim_frames;
-		// Update the states of the Tiles.
+
+		// Update the states of the other Tiles.
 		for(unsigned int i = 0; i < layers[curLayer]->size(); i++)
 		{
 			layers[curLayer]->at(i)->setState(INACTIVE);
 		}
-		currentTile->setState(ACTIVE);
-		curDir = NORTH;
-		printf("Layer: %d\nP: %10s\nC:%10s\n", curLayer, previousTile->getName(), currentTile->getName());
 
+		// Set the current direction to a none NONE value so that the animation handler does a job.
+		curDir=NORTH;
 	}
+
+	// If there are no Tiles in this layer, we just set the current and previous tiles to NULL.
 	else
 	{
 		currentTile = NULL;
@@ -358,16 +398,10 @@ Shifts to a particular layer.
 */
 void TileGrid::setLayer(unsigned int layer)
 {
-	animDeltaX = 0;
-	animDeltaY = 0;
 	curLayer = layer;
 	curLayer%= layers.size();
 	if(layers[curLayer]->size()>0)
 	{
-	
-		//if(curDir!=NONE)return;
-		
-		
 		currentTile->setState(INACTIVE);
 		previousTile->setState(INACTIVE);
 		previousTile = layers[curLayer]->at(0);
@@ -383,7 +417,6 @@ void TileGrid::setLayer(unsigned int layer)
 		}
 		currentTile->setState(ACTIVE);
 		curDir=NORTH;
-		printf("Layer: %d\nP: %10s\nC:%10s\n", curLayer, previousTile->getName(), currentTile->getName());
 	}
 	else
 	{
@@ -451,6 +484,9 @@ void TileGrid::handleAnimation(void)
 		curDir = NONE;
 	}
 
+	// If the animation deltas are super tiny we call it quits because
+	// any movement that generates a delta that small is redundant and
+	// possibly unwanted.
 	if(abs(animDeltaX)<.005 && abs(animDeltaY)<.005)
 	{
 		curDir = NONE;
