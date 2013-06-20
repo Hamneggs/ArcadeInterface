@@ -31,7 +31,7 @@ Interface Customization
 =======================
 The interface has many properties that can be configured as well.
 * Control mappings.
-* Sound effects.
+* Sound effects and volume.
 * Universal texture images, such as the UI overlay, tile frame, and exit warning images.
 * Transition and shutdown times.
 * Fullscreen rendering.
