@@ -12,6 +12,17 @@ Stay safe and don't fuck with either.
 #define EXT_SHD_ATTR		"ext_shaders"
 #define EXT_TILE_ATTR		"ext_tiles"
 
+#define SND_NODE			"sound"
+#define BGM_ATTR			"mus_path"
+#define M_SND_ATTR			"move_path"
+#define S_SND_ATTR			"sel_path"
+#define R_SND_ATTR			"rej_path"
+#define VOL_ATTR			"vol"
+#define BGM_VOL_ATTR		"mus_vol"
+#define M_VOL_ATTR			"move_vol"
+#define S_VOL_ATTR			"sel_vol"
+#define R_VOL_ATTR			"rej_vol"
+
 #define WIN_NODE			"window"
 #define X_RES_ATTR			"x_res"
 #define Y_RES_ATTR			"y_res"
@@ -27,6 +38,7 @@ Stay safe and don't fuck with either.
 #define FRAME_TEX_ATTR		"frame"
 #define EXIT_ATTR			"exit"
 #define OVR_ATTR			"overlay"
+#define INTR_ATTR			"intro"
 
 #define SHD_NODE			"shader_paths"
 #define BGV_ATTR			"bg_v"
@@ -38,6 +50,7 @@ Stay safe and don't fuck with either.
 
 #define ANIM_NODE			"anim"
 #define ANIM_FRAMES_ATTR	"anim_frames"
+#define PL_INTR_ATTR		"play_intro"
 #define SDT_ATTR			"shutdown_time"
 
 #define TILE_ATTR_NODE		"tile_loading"

@@ -215,9 +215,14 @@ namespace window
 			{
 				grid->getCurrent()->setState(ACTIVE);
 				printf("\ncommand: %s\n", grid->getCurrent()->getCommand());
-				system(grid->getCurrent()->getCommand());
+				audio::stopBGM();
+				if(grid->getCurrent()->isSelectable())
+				{
+					system(grid->getCurrent()->getCommand());
+				}
 				glutShowWindow();
 				window::setFullScreen(c->fullscr);
+				audio::startBGM();
 			}
 		}
 	}

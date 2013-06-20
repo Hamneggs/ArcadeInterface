@@ -30,4 +30,9 @@ namespace audio
 	Plays the tile selection sound.
 	*/
 	void playSelect(void); 
+
+	/*
+	Plays the rejected action sound.
+	*/
+	void playRejection(void);
 }

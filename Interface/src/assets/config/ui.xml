@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui_config>
-  <loading ext_shaders="0" ext_tiles="1"/>
-  <sound mus_path="assets\sound\dataselect.wav" move_path="assets\sound\move.wav" sel_path="assets\sound\select.wav" vol="1.0" mus_vol="0.80" move_vol="0.68" sel_vol="0.90" />
-  <window x_res="500" y_res="400" window_x="10" window_y="30" fullscreen="0" clear_r="1.00" clear_g="1.00" clear_b="0.00" title="Arcade Interface II Turbo Remix HD A Realistic Other World & Knuckles The Precursor Legacy Warped Team Racing Up Your Arsenal Rocks The 80s Deluxe Beach Babe O'Rama Spearhead Breakthrough by Gerard Geer"/>
-  <vital_tex_paths frame="assets\images\dependent\cshframe.png" exit="assets\images\dependent\exitwarning.png" overlay="assets\images\dependent\baseOverlay2.png"/>
+  <loading ext_shaders="1" ext_tiles="0"/>
+  <sound mus_path="assets\sound\dataselect.wav" move_path="assets\sound\move.wav" sel_path="assets\sound\select.wav" rej_path="assets\sound\reject.wav" vol="1.0" mus_vol="0.80" move_vol="0.38" sel_vol="0.90" rej_vol="0.58"/>
+  <window x_res="1024" y_res="768" window_x="10" window_y="30" fullscreen="1" clear_r="1.00" clear_g="1.00" clear_b="0.00" title="Arcade Interface II Turbo Remix HD A Realistic Other World & Knuckles The Precursor Legacy Warped Team Racing Up Your Arsenal Rocks The 80s Deluxe Beach Babe O'Rama Spearhead Breakthrough by Gerard Geer"/>
+  <vital_tex_paths frame="assets\images\dependent\cshframe.png" exit="assets\images\dependent\exitwarning.png" overlay="assets\images\dependent\baseOverlay2.png" intro="assets\images\dependent\intro.png"/>
   <shader_paths bg_v="assets\shaders\bg.vert" bg_f="assets\shaders\bg.frag" hud_v="assets\shaders\hud.vert" hud_f="assets\shaders\hud.frag" tile_v="assets\shaders\tile.vert" tile_f="assets\shaders\tile.frag"/>
-  <anim anim_frames="12" shutdown_time="3000"/>
-  <tile_loading nn="game"ap="active_path" ip="inactive_path" bp="bg_path" n="name" c="command" d="description" i="id" ni="north_id" si="south_id" ei="east_id" wi="west_id" hf="has_frame" is="is_first" x="x" y="y" sxa="sx_active" sya="sy_active" sxi="sx_inactive" syi="sy_inactive" s="selectable"/>\
+  <anim anim_frames="12" shutdown_time="3000" play_intro ="1"/>
+  <tile_loading nn="game"ap="active_path" ip="inactive_path" bp="bg_path" n="name" c="command" d="description" i="id" ni="north_id" si="south_id" ei="east_id" wi="west_id" hf="has_frame" is="is_first" x="x" y="y" sxa="sx_active" sya="sy_active" sxi="sx_inactive" syi="sy_inactive" s="selectable"/>
   <control_config shutdown_key_a="i" shutdown_key_b="j" select_key="a" window_key="f" fast_shutdown_key="'" next_config_key="]" prev_config_key="["/>
   <tile_config path="assets\config\test.xml"/>
   <tile_config path="assets\config\test2.xml"/>

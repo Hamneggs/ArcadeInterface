@@ -6,6 +6,7 @@
 #include <GL\glut.h>
 #include "Window.h"
 
+
 namespace input
 {
 

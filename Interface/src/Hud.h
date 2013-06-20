@@ -53,6 +53,11 @@ private:
 	GLTexture warning;
 
 	/*
+	The intro texture.
+	*/
+	GLTexture intro;
+
+	/*
 	The warning flag.
 	*/
 	bool isWarning;

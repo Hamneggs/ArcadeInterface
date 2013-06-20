@@ -6,6 +6,7 @@
 #include "TileGrid.h"
 #include "Hud.h"
 #include "UIConfig.h"
+#include "SFX.h"
 
 namespace window
 {

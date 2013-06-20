@@ -164,12 +164,14 @@ namespace input
 			// When we execute the command, GLUT misses the releaseKey event
 			// of the select key. That means we have to deliberately remove it.
 			removeKey(key);
-			if(grid->getCurrent()->isSelectable()){
+			if(grid->getCurrent()->isSelectable() && grid->getCurrent()->getState() >1.0){
+				audio::playSelect();
 				window::setFullScreen(false);
 				glutHideWindow();
 				glutIconifyWindow();
 				grid->getCurrent()->execCommand();
 			}
+			else audio::playRejection();
 		}
 		else if(isKeyPressed(c->sdk_f))
 		{

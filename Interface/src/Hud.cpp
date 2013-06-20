@@ -72,6 +72,23 @@ bool Hud::init(float x, float y, float sx, float sy, UIConfig * c)
 		warning.setSamplerParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	}
 
+	// Load the introduction image.
+	if(c->intro_path != NULL)
+	{
+		if(c->ext_tile_rep) printf("\nPATH: %s\n", c->intro_path);
+		if(c->ext_tile_rep) printf("\tloading image...");
+		imageLoaded = intro.loadTextureImage(c->intro_path, false, GL_BGRA);
+		if(!imageLoaded){
+			printf("BACKGROUND ERROR TEXTURE: %s\nERROR: Could not load INTRO OVERLAY texture.\n");
+		}
+		if(c->ext_tile_rep) printf("\tsetting parameters...");
+		intro.setFiltering(GL_NEAREST, GL_LINEAR);
+		intro.setSamplerParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		intro.setSamplerParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		intro.setSamplerParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	}
+	else printf("\n\n\n OH SHIT INTRO NOT LOADED AH FUCK\n\n\n");
+
 	return program.isLinked() && imageLoaded;
 }
 
@@ -85,6 +102,9 @@ void Hud::render(void)
 	// If the warning flag is set we pass in the exit warning rather than the overlay.
 	if(isWarning) warning.bindTexture(0);
 	else hudTexture.bindTexture(0);
+	
+	// Bind the intro to an independent texture unit.
+	intro.bindTexture(1);
 
 	// Garner the location of the uniforms.
 	GLuint uniLoc;
@@ -94,6 +114,10 @@ void Hud::render(void)
 	glUniform2f(uniLoc, sx, sy);
 	uniLoc = glGetUniformLocation(program.getProgramID(), "hudTexture");
 	glUniform1i(uniLoc, 0);
+	uniLoc = glGetUniformLocation(program.getProgramID(), "introTexture");
+	glUniform1i(uniLoc, 1);
+	uniLoc = glGetUniformLocation(program.getProgramID(), "time");
+	glUniform1i(uniLoc, glutGet(GLUT_ELAPSED_TIME));
 
 	// Since we are targeting OpenGL 2.0, we have to do some wonky per-vertex glBegin and glEnd shit.
 	glBegin(GL_TRIANGLE_STRIP);

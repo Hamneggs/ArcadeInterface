@@ -299,7 +299,7 @@ void inline loadUIProperties(UIConfig * c)
 	printf("value = %d\n", swapint);
 
 //=========================================================================================
-// Tile and shader loading preferences.
+// Animation preferences.
 //=========================================================================================
 	
 	// Go to the loading properties node so we can load the extended_report preferences.
@@ -317,8 +317,84 @@ void inline loadUIProperties(UIConfig * c)
 	printf("Loading shutdown time (in milliseconds)...");
 	attr = node->first_attribute(SDT_ATTR);
 	c->shutdown_time = atoi(attr->value());
-	printf("value = %d\n", c->anim_frames);
+	printf("value = %d\n", c->shutdown_time);
+
+	// Load whether or not to play the intro.
+	printf("Loading whether or not to play intro...");
+	attr = node->first_attribute(PL_INTR_ATTR);
+	swapint = atoi(attr->value());
+	if(swapint == 1) c->play_intro = true;
+	else c->play_intro = false;
+	printf("value = %d\n", swapint);
+
+
+//=========================================================================================
+// Sound filepaths and properties.
+//=========================================================================================
+
+	// Go to the sound properties node so we can load the extended_report preferences.
+	printf("==MUSIC AND SOUND==============================================================");
+	node = node->parent();
+	node = node->first_node(SND_NODE);
+	printf("\nNODE NAME: %s\n", node->name());
+
+	// Load the BGM path.
+	printf("Loading BGM file path...");
+	attr = node->first_attribute(BGM_ATTR);
+	swapstr = attr->value();
+	c->bgm = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
+	strcpy(c->bgm, swapstr);
+	printf(" ...done\n");
 	
+	// Load the movement sound path.
+	printf("Loading movement sound file path...");
+	attr = node->first_attribute(M_SND_ATTR);
+	swapstr = attr->value();
+	c->m_snd = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
+	strcpy(c->m_snd, swapstr);
+	printf(" ...done\n");
+
+	// Load the selection sound path.
+	printf("Loading selection sound file path...");
+	attr = node->first_attribute(S_SND_ATTR);
+	swapstr = attr->value();
+	c->s_snd = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
+	strcpy(c->s_snd, swapstr);
+	printf(" ...done\n");
+
+	// Load the rejection sound path.
+	printf("Loading rejection sound file path...");
+	attr = node->first_attribute(R_SND_ATTR);
+	swapstr = attr->value();
+	c->r_snd = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
+	strcpy(c->r_snd, swapstr);
+	printf(" ...done\n");
+
+	// Load the main volume.
+	printf("Loading main volume...");
+	attr = node->first_attribute(VOL_ATTR);
+	c->vol = float(atof(attr->value()));
+
+	// Load the BGM volume.
+	printf("Loading BGM volume...");
+	attr = node->first_attribute(BGM_VOL_ATTR);
+	c->bgm_vol = float(atof(attr->value()));
+
+	// Load the movement sound volume.
+	printf("Loading movement sound volume...");
+	attr = node->first_attribute(M_VOL_ATTR);
+	c->m_vol = float(atof(attr->value()));
+
+	// Load the selection sound volume.
+	printf("Loading selection sound volume...");
+	attr = node->first_attribute(S_VOL_ATTR);
+	c->s_vol = float(atof(attr->value()));
+
+	// Load the rejection sound volume.
+	printf("Loading rejection sound volume...");
+	attr = node->first_attribute(R_VOL_ATTR);
+	c->r_vol = float(atof(attr->value()));
+
 
 //=========================================================================================
 // Window properties.
@@ -412,6 +488,14 @@ void inline loadUIProperties(UIConfig * c)
 	swapstr = attr->value();
 	c->ovr_path = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
 	strcpy(c->ovr_path, swapstr);
+	printf(" ...done\n");
+
+	// Load the filepath of the intro overlay texture.
+	printf("Loading overlay intro texture path...");
+	attr = node->first_attribute(INTR_ATTR);
+	swapstr = attr->value();
+	c->intro_path = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
+	strcpy(c->intro_path, swapstr);
 	printf(" ...done\n");
 
 //=========================================================================================
@@ -760,10 +844,10 @@ void inline loadUIProperties(UIConfig * c)
 
 
 
-	printf("===============================================================================\n");
+	/*printf("===============================================================================\n");
 	printf("Done loading config data.\n");
 	printf("DATA IS AS FOLLOWS:\n");
-	printConfig(c);
+	printConfig(c);*/
 	//delete &attr;
 	//delete &node;
 

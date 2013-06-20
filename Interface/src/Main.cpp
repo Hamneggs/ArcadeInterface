@@ -17,6 +17,9 @@ int main(int argc, char * argv[])
 	// Load the configuration preferences from a file into the config struct.
 	loadUIProperties(&cfg);
 
+	// Initialize the sound engine.
+	audio::init(&cfg);
+
 	// Assign our TileGrid instance to the window.
 	window::setGrid(&grid);
 
@@ -45,6 +48,9 @@ int main(int argc, char * argv[])
 
 	// Assign our background instance to the window.
 	window::setBG(&bg);
+
+	// Start the BGM!
+	audio::startBGM();
 
 	// Start the GLUT rendering loop. No going back now, sweetheart.
 	glutMainLoop();

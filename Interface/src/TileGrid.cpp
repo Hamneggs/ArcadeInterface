@@ -206,6 +206,10 @@ void TileGrid::changeTiles(Direction dir)
 		return;
 	}
 
+	
+	// Play the movement sound.
+	audio::playMove();
+
 	// Store the direction for easy necessity testing when actually
 	// performing the animation.
 	curDir = dir;
@@ -302,6 +306,9 @@ void TileGrid::shiftBackLayer(void)
 	// to the first one on the new layer.
 	if(layers[curLayer]->size()>0)
 	{
+		// Play the movement sound.
+		audio::playMove();
+
 		// Deactivate the previously current tile.
 		currentTile->setState(INACTIVE);
 
@@ -313,7 +320,6 @@ void TileGrid::shiftBackLayer(void)
 		currentTile = layers[curLayer]->at(0);
 
 		// Reset the current Tile.
-		currentTile->setState(INACTIVE);
 		currentTile->setState(ACTIVE);
 
 		// Set up the animation deltas so that the screen snaps to the new current Tile.
@@ -357,6 +363,9 @@ void TileGrid::shiftForwardLayer(void)
 	// to the first one on the new layer.
 	if(layers[curLayer]->size()>0)
 	{
+		// Play the movement sound.
+		audio::playMove();
+
 		// Deactivate the previously current tile.
 		currentTile->setState(INACTIVE);
 
@@ -368,7 +377,6 @@ void TileGrid::shiftForwardLayer(void)
 		currentTile = layers[curLayer]->at(0);
 
 		// Reset the current Tile.
-		currentTile->setState(INACTIVE);
 		currentTile->setState(ACTIVE);
 
 		// Set up the animation deltas so that the screen snaps to the new current Tile.
@@ -403,13 +411,12 @@ void TileGrid::setLayer(unsigned int layer)
 	if(layers[curLayer]->size()>0)
 	{
 		currentTile->setState(INACTIVE);
-		previousTile->setState(INACTIVE);
-		previousTile = layers[curLayer]->at(0);
+		previousTile = currentTile;
 		currentTile = layers[curLayer]->at(0);
 		currentTile->setState(INACTIVE);
 		currentTile->setState(ACTIVE);
-		animDeltaX = (.5-currentTile->getX())/c->anim_frames;
-		animDeltaY = (.5-currentTile->getY())/c->anim_frames;
+		animDeltaX = (.5f-currentTile->getX())/c->anim_frames;
+		animDeltaY = (.5f-currentTile->getY())/c->anim_frames;
 		// Update the states of the Tiles.
 		for(unsigned int i = 0; i < layers[curLayer]->size(); i++)
 		{
@@ -465,21 +472,21 @@ void TileGrid::handleAnimation(void)
 
 	// We reset the X movement factor when we don't need to move 
 	// horizontally anymore.
-	if(abs(currentTile->getX()-.5) < abs(animDeltaX*1.1) )
+	if(abs(currentTile->getX()-.5f) < abs(animDeltaX*1.1) )
 	{
 		animDeltaX = 0;
 	}
 
 	// We reset the Y movement factor when we don't need to move 
 	// vertically anymore.
-	if(abs(currentTile->getY()-.5) < abs(animDeltaY*1.1) )
+	if(abs(currentTile->getY()-.5f) < abs(animDeltaY*1.1) )
 	{
 		animDeltaY = 0;
 	}
 
 	// If we don't need to move any more, we reset the movement direction.
-	if(abs(currentTile->getX()-.5) < abs(animDeltaX*1.1) && 
-		abs(currentTile->getY()-.5) < abs(animDeltaY*1.1) )
+	if(abs(currentTile->getX()-.5f) < abs(animDeltaX*1.1) && 
+		abs(currentTile->getY()-.5f) < abs(animDeltaY*1.1) )
 	{
 		curDir = NONE;
 	}

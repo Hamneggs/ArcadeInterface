@@ -3,6 +3,7 @@
 #include "Tile.h"
 #include "const.h"
 #include "UIConfig.h"
+#include "SFX.h"
 
 /*
 This class represents a grid of Tiles (obviously.) This class tracks the
