@@ -31,7 +31,7 @@ Interface Customization
 =======================
 The interface has many properties that can be configured as well.
 * Control mappings.
-* Sound effects.
+* Sound effects and volume.
 * Universal texture images, such as the UI overlay, tile frame, and exit warning images.
 * Transition and shutdown times.
 * Fullscreen rendering.
@@ -52,3 +52,11 @@ property page.
 * Wrestle with all the crap GLEW gives everyone on their first try.
 * Do what you want with the assets to get the .exe to see them. I just leave them in the source directory 
 until I need to distribute.
+
+Running the Included Build
+==========================
+* Copy the assets/ directory into the same folder as the .exe
+* Get any other .dlls it whines about.
+* Run! Woohoo!
+While the program may run, you need to configure the command of each Tile to do what you want. 
+I doubt that you ahre going to have your roms in the samde directory as mine, for example.
