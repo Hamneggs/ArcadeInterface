@@ -32,21 +32,27 @@ vec4 getTexel(void)
 	{
 		vec4 white = vec4(1);
 		vec4 introTexel = texture2D(introTexture, vec2(texCoord.x, 1-texCoord.y));
+		vec4 hudTexel = texture2D(hudTexture, vec2(texCoord.x, 1-texCoord.y));
 		
 		float factor = 1-(float((transition)-(time-duration))/float(transition));
 		
-		if(factor < .5)
+		if(factor < .33333)
 		{
-			factor *= 2;
+			factor *= 3;
 			introTexel.r = (1*(factor)) + (introTexel.r * (1-factor));
 			introTexel.g = (1*(factor)) + (introTexel.g * (1-factor));
 			introTexel.b = (1*(factor)) + (introTexel.b * (1-factor));
 			return introTexel;
 		}
+		else if(factor < .66666)
+		{
+			white.a *= 1-((factor-.333333)*3);
+			return white;
+		}
 		else
 		{
-			white.a *= 1-((factor-.5)*2);
-			return white;
+			hudTexel.a *= ((factor-.666666)*3);
+			return hudTexel;
 		}
 		
 	}

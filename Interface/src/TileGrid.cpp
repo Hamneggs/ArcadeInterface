@@ -80,7 +80,6 @@ bool TileGrid::addTile(Tile *tile, bool first)
 	// of the Layer.
 	if(first)
 	{
-		printf("FIRST BITCHES!!!\n");
 		// Since it is first it must be made active, and all other Tiles must
 		// be made inactive.
 		for(unsigned int i = 0; i < layers[curLayer]->size(); i ++)
@@ -109,7 +108,6 @@ bool TileGrid::addTile(Tile *tile, bool first)
 	// of the current layer.
 	else
 	{
-		printf("NOT FIRST!!!\n");
 		layers[curLayer]->push_back(tile);
 	}
 
@@ -117,7 +115,6 @@ bool TileGrid::addTile(Tile *tile, bool first)
 	// to make one.
 	if(currentTile == NULL)
 	{
-		printf("CURRENT TILE IS NULL\n");
 		// Get the first tile in the grid since we can assume that at this point
 		// only one has been added and set the currentTile to point to it.
 		currentTile = layers[curLayer]->at(0);
@@ -138,11 +135,8 @@ bool TileGrid::addTile(Tile *tile, bool first)
 	// If there is no previous Tile we create one.
 	if(previousTile == NULL)
 	{
-		printf("PREVIOUS TILE IS NULL\n");
 		previousTile = layers[curLayer]->at(0);
 	}
-	
-	printf("\nP: %10s\nC:%10s\n", previousTile->getName(), currentTile->getName());
 	return true;
 }
 
@@ -197,12 +191,6 @@ void TileGrid::changeTiles(Direction dir)
 	// If we don't have  a current Tile yet, we can't move from it.
 	if(currentTile == NULL || previousTile == NULL || curDir != NONE)
 	{
-		printf("\nTILES NOT CHANGED");
-		printf("\nCURRENT TILE NULL? %d", int(currentTile == NULL));
-		printf("\nPREVIOUS TILE NULL? %d", int(previousTile == NULL));
-		printf("\nCUR DIR IS NOT NONE? %d", int(curDir != NONE));
-		
-		printf("\nP: %10s\nC:%10s\n", previousTile->getName(), currentTile->getName());
 		return;
 	}
 
@@ -232,7 +220,6 @@ void TileGrid::changeTiles(Direction dir)
 	// Set the deltas so that we can move smoothly between Tiles.
 	animDeltaX = -(currentTile->getX() - previousTile->getX())/c->anim_frames;
 	animDeltaY = -(currentTile->getY() - previousTile->getY())/c->anim_frames;
-	printf("\nP: %10s\nC:%10s\n", previousTile->getName(), currentTile->getName());
 }
 
 /*
@@ -413,7 +400,6 @@ void TileGrid::setLayer(unsigned int layer)
 		currentTile->setState(INACTIVE);
 		previousTile = currentTile;
 		currentTile = layers[curLayer]->at(0);
-		currentTile->setState(INACTIVE);
 		currentTile->setState(ACTIVE);
 		animDeltaX = (.5f-currentTile->getX())/c->anim_frames;
 		animDeltaY = (.5f-currentTile->getY())/c->anim_frames;

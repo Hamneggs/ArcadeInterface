@@ -374,26 +374,31 @@ void inline loadUIProperties(UIConfig * c)
 	printf("Loading main volume...");
 	attr = node->first_attribute(VOL_ATTR);
 	c->vol = float(atof(attr->value()));
+	printf(" ...done\n");
 
 	// Load the BGM volume.
 	printf("Loading BGM volume...");
 	attr = node->first_attribute(BGM_VOL_ATTR);
 	c->bgm_vol = float(atof(attr->value()));
+	printf("value = %f\n", c->bgm_vol);
 
 	// Load the movement sound volume.
 	printf("Loading movement sound volume...");
 	attr = node->first_attribute(M_VOL_ATTR);
 	c->m_vol = float(atof(attr->value()));
+	printf("value = %f\n", c->m_vol);
 
 	// Load the selection sound volume.
 	printf("Loading selection sound volume...");
 	attr = node->first_attribute(S_VOL_ATTR);
 	c->s_vol = float(atof(attr->value()));
+	printf("value = %f\n", c->s_vol);
 
 	// Load the rejection sound volume.
 	printf("Loading rejection sound volume...");
 	attr = node->first_attribute(R_VOL_ATTR);
 	c->r_vol = float(atof(attr->value()));
+	printf("value = %f\n", c->r_vol);
 
 
 //=========================================================================================
@@ -561,7 +566,7 @@ void inline loadUIProperties(UIConfig * c)
 //=========================================================================================
 	
 	// Now we need to go to the Tile attributes node.
-	printf("==LOADING TILE NODE ATTRIBUTE NAMES=============================================\n");
+	printf("==LOADING TILE NODE ATTRIBUTE NAMES============================================\n");
 	node = node->parent();
 	node = node->first_node(TILE_ATTR_NODE);
 
@@ -842,14 +847,11 @@ void inline loadUIProperties(UIConfig * c)
 	}
 	printf("...Loaded %d paths.\n", c->paths.size());
 
-
-
-	/*printf("===============================================================================\n");
-	printf("Done loading config data.\n");
-	printf("DATA IS AS FOLLOWS:\n");
-	printConfig(c);*/
-	//delete &attr;
-	//delete &node;
-
+	if(c->ext_tile_rep)
+	{
+		printf("===============================================================================\n");
+		printf("DATA LOADED IS AS FOLLOWS:\n");
+		printConfig(c);
+	}
 }
 #endif

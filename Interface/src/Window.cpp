@@ -83,7 +83,6 @@ namespace window
 	{
 		
 		glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
-			printf("X: %d, Y: %d \n", c->x_res, c->y_res);
 
 
 		glutInitWindowSize(c->x_res, c->y_res);
