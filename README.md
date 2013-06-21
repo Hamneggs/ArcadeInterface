@@ -59,4 +59,4 @@ Running the Included Build
 * Get any other .dlls it whines about.
 * Run! Woohoo!
 While the program may run, you need to configure the command of each Tile to do what you want. 
-I doubt that you ahre going to have your roms in the samde directory as mine, for example.
+I doubt that you are going to have your roms in the samde directory as mine, for example.
