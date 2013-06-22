@@ -13,15 +13,67 @@ Determines whether or not the given c-string contains a whole number.
 */
 bool inline isWholeNumber(char * n)
 {
+	// Iterate through each letter in the c-string.
 	for(unsigned int i = 0; i < strlen(n); i++)
 	{
-		if(int(n[i]) < 48 || int(n[i]) < 57)
+		if(int(n[i]) > 47 || int(n[i]) < 58) // Do the ol integer ascii test.
 		{
 			return false;
 		}
 	}
 	return true;
 }
+
+/*
+Loads a String from a node and attribute pair into a destination c-string.
+*/
+inline char * loadString(char * dst, char * attrName, rapidxml::xml_node<char> * node, rapidxml::xml_attribute<char> * attr)
+{
+	attr = node->first_attribute(attrName);
+	dst = (char *) malloc( (sizeof(char)*(strlen(attr->value())+1)));
+	strcpy(dst, attr->value());
+	return dst;
+}
+
+/*
+Loads an integer from a node and attribute pair and returns it.
+*/
+inline int loadInt(char * attrName, rapidxml::xml_node<char> * node, rapidxml::xml_attribute<char> * attr)
+{
+	attr = node->first_attribute(attrName);
+	return atoi(attr->value());
+}
+
+/*
+Loads an floating point value from a node and attribute pair and returns it.
+*/
+inline float loadFloat(char * attrName, rapidxml::xml_node<char> * node, rapidxml::xml_attribute<char> * attr)
+{
+	attr = node->first_attribute(attrName);
+	return (float)atof(attr->value());
+}
+
+/*
+Loads a boolean value from a node and attribute pair and returns it.
+*/
+inline bool loadBool(char * attrName, rapidxml::xml_node<char> * node, rapidxml::xml_attribute<char> * attr)
+{
+	return (loadInt(attrName, node, attr) > 0);
+}
+
+/*
+Loads a character from a node and attribute pair and returns it.
+*/
+inline char loadChar(char * attrName, rapidxml::xml_node<char> * node, rapidxml::xml_attribute<char> * attr)
+{
+	attr = node->first_attribute(attrName);
+	if(isWholeNumber(attr->value()))
+	{
+		return char(atoi(attr->value()));
+	}
+	else return attr->value()[0];
+}
+
 
 /*
 Loads tiles from an XML file created by the editor.
@@ -59,7 +111,7 @@ void inline loadTiles(TileGrid * grid, UIConfig * c)
 		// Parse through the DOM and create Tiles.
 		rapidxml::xml_node<char> * node = doc.first_node();
 		node = node->first_node(c->nm);
-		rapidxml::xml_attribute<char> * attr;
+		rapidxml::xml_attribute<char> * attr = NULL;
 
 		grid->addLayer();
 		printf("Changing layers... current: %d, total %d\n", grid->getCurrentLayer(), grid->getNumLayers());
@@ -82,11 +134,7 @@ void inline loadTiles(TileGrid * grid, UIConfig * c)
 			t->init(c);
 		
 			if(c->ext_tile_rep) printf("\n\tLoading %s", c->is);
-			attr = node->first_attribute(c->is);
-			if(c->ext_tile_rep) printf(" [value: %s][atoi: %d]", attr->value(), atoi(attr->value()));
-			int firstValue = atoi(attr->value());
-					if(firstValue == 1)	first = true;
-					else			first = false;
+			first = loadBool(c->is, node, attr);
 			if(c->ext_tile_rep) printf("\n\t\t...done");
 
 			// Now we initialize the Tile's GPU holdings.
@@ -265,7 +313,7 @@ void inline loadUIProperties(UIConfig * c)
 
 	// Get the first node of the DOM so we can have a point of reference for navigation.
 	rapidxml::xml_node<char> * node = doc.first_node();
-	rapidxml::xml_attribute<char> * attr;
+	rapidxml::xml_attribute<char> * attr = NULL;
 
 	// Create a swapspace int to load booleans from integer values.
 	int swapint = 0;
@@ -284,19 +332,13 @@ void inline loadUIProperties(UIConfig * c)
 	
 	// Load the extended shader report.
 	printf("Loading extended shader reporting preference...");
-	attr = node->first_attribute(EXT_SHD_ATTR);
-	swapint = atoi(attr->value());
-	if(swapint == 1) c->ext_shader_rep = true;
-	else c->ext_shader_rep = false;
-	printf("value = %d\n", swapint);
+	c->ext_shader_rep = loadBool(EXT_SHD_ATTR, node, attr);
+	printf("value = %d\n", (int)c->ext_shader_rep);
 
 	// Load the extended Tile report.
 	printf("Loading extended Tile load reporting preference...");
-	attr = node->first_attribute(EXT_TILE_ATTR);
-	swapint = atoi(attr->value());
-	if(swapint == 1) c->ext_tile_rep = true;
-	else c->ext_tile_rep = false;
-	printf("value = %d\n", swapint);
+	c->ext_tile_rep = loadBool(EXT_TILE_ATTR, node, attr);
+	printf("value = %d\n", (int)c->ext_tile_rep);
 
 //=========================================================================================
 // Animation preferences.
@@ -309,23 +351,18 @@ void inline loadUIProperties(UIConfig * c)
 
 	// Load the number of frames used to transition between tiles.
 	printf("Loading animation time (in frames)...");
-	attr = node->first_attribute(ANIM_FRAMES_ATTR);
-	c->anim_frames = atoi(attr->value());
+	c->anim_frames = loadInt(ANIM_FRAMES_ATTR, node, attr);
 	printf("value = %d\n", c->anim_frames);
 
 	// Load the time taken to shut down.
 	printf("Loading shutdown time (in milliseconds)...");
-	attr = node->first_attribute(SDT_ATTR);
-	c->shutdown_time = atoi(attr->value());
+	c->shutdown_time = loadInt(SDT_ATTR, node, attr);
 	printf("value = %d\n", c->shutdown_time);
 
 	// Load whether or not to play the intro.
 	printf("Loading whether or not to play intro...");
-	attr = node->first_attribute(PL_INTR_ATTR);
-	swapint = atoi(attr->value());
-	if(swapint == 1) c->play_intro = true;
-	else c->play_intro = false;
-	printf("value = %d\n", swapint);
+	c->play_intro = loadBool(PL_INTR_ATTR, node, attr);
+	printf("value = %d\n", (int)c->play_intro);
 
 
 //=========================================================================================
@@ -340,64 +377,47 @@ void inline loadUIProperties(UIConfig * c)
 
 	// Load the BGM path.
 	printf("Loading BGM file path...");
-	attr = node->first_attribute(BGM_ATTR);
-	swapstr = attr->value();
-	c->bgm = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->bgm, swapstr);
+	c->bgm = loadString(c->bgm, BGM_ATTR, node, attr);
 	printf(" ...done\n");
 	
 	// Load the movement sound path.
 	printf("Loading movement sound file path...");
-	attr = node->first_attribute(M_SND_ATTR);
-	swapstr = attr->value();
-	c->m_snd = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->m_snd, swapstr);
+	c->m_snd = loadString(c->m_snd, M_SND_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Load the selection sound path.
 	printf("Loading selection sound file path...");
-	attr = node->first_attribute(S_SND_ATTR);
-	swapstr = attr->value();
-	c->s_snd = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->s_snd, swapstr);
+	c->s_snd = loadString(c->s_snd, S_SND_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Load the rejection sound path.
 	printf("Loading rejection sound file path...");
-	attr = node->first_attribute(R_SND_ATTR);
-	swapstr = attr->value();
-	c->r_snd = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->r_snd, swapstr);
+	c->r_snd = loadString(c->r_snd, R_SND_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Load the main volume.
 	printf("Loading main volume...");
-	attr = node->first_attribute(VOL_ATTR);
-	c->vol = float(atof(attr->value()));
+	c->vol = loadFloat(VOL_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Load the BGM volume.
 	printf("Loading BGM volume...");
-	attr = node->first_attribute(BGM_VOL_ATTR);
-	c->bgm_vol = float(atof(attr->value()));
+	c->bgm_vol = loadFloat(BGM_VOL_ATTR, node, attr);
 	printf("value = %f\n", c->bgm_vol);
 
 	// Load the movement sound volume.
 	printf("Loading movement sound volume...");
-	attr = node->first_attribute(M_VOL_ATTR);
-	c->m_vol = float(atof(attr->value()));
+	c->m_vol = loadFloat(M_VOL_ATTR, node, attr);
 	printf("value = %f\n", c->m_vol);
 
 	// Load the selection sound volume.
 	printf("Loading selection sound volume...");
-	attr = node->first_attribute(S_VOL_ATTR);
-	c->s_vol = float(atof(attr->value()));
+	c->s_vol = loadFloat(S_VOL_ATTR, node, attr);
 	printf("value = %f\n", c->s_vol);
 
 	// Load the rejection sound volume.
 	printf("Loading rejection sound volume...");
-	attr = node->first_attribute(R_VOL_ATTR);
-	c->r_vol = float(atof(attr->value()));
+	c->r_vol = loadFloat(R_VOL_ATTR, node, attr);
 	printf("value = %f\n", c->r_vol);
 
 
@@ -413,52 +433,39 @@ void inline loadUIProperties(UIConfig * c)
 
 	// Load the X Resolution of the application.
 	printf("Loading X resolution...");
-	attr = node->first_attribute(X_RES_ATTR);
-	c->x_res = atoi(attr->value());
+	c->x_res = loadFloat(X_RES_ATTR, node, attr);
 	printf("value = %d\n", c->x_res);
 	
 	// Load the Y Resolution of the application.
 	printf("Loading Y resolution...");
-	attr = node->first_attribute(Y_RES_ATTR);
-	c->y_res = atoi(attr->value());
+	c->y_res = loadFloat(Y_RES_ATTR, node, attr);
 	printf("value = %d\n", c->y_res);
 
 	// Load the window location X coordinate.
 	printf("Loading window X location...");
-	attr = node->first_attribute(WIN_X_ATTR);
-	c->win_x = atoi(attr->value());
+	c->win_x = loadFloat(WIN_X_ATTR, node, attr);
 	printf("value = %d\n", c->win_x);
 
 	// Load the window location Y coordinate.
 	printf("Loading window X location...");
-	attr = node->first_attribute(WIN_Y_ATTR);
-	c->win_y = atoi(attr->value());
+	c->win_y = loadFloat(WIN_Y_ATTR, node, attr);
 	printf("value = %d\n", c->win_y);
 
 	// Load the application's fullscreen status.
 	printf("Loading fullscreen status...");
-	attr = node->first_attribute(FS_ATTR);
-	swapint = atoi(attr->value());
-	if(swapint == 0) c->fullscr = false;
-	else c->fullscr = true;
-	printf("value = %d\n", swapint);
+	c->fullscr = loadBool(FS_ATTR, node, attr);
+	printf("value = %d\n", (int)c->fullscr);
 
 	// Load the application's window blanking color.
 	printf("Loading blanking color...");
-	attr = node->first_attribute(CLR_R_ATTR);
-	c->clr_r = float(atof(attr->value()));
-	attr = node->first_attribute(CLR_G_ATTR);
-	c->clr_g = float(atof(attr->value()));
-	attr = node->first_attribute(CLR_B_ATTR);
-	c->clr_b = float(atof(attr->value()));
+	c->clr_r = loadFloat(CLR_R_ATTR, node, attr);
+	c->clr_g = loadFloat(CLR_G_ATTR, node, attr);
+	c->clr_b = loadFloat(CLR_B_ATTR, node, attr);
 	printf("R = %1.3f G = %1.3f B = %1.3f\n", c->clr_r, c->clr_g, c->clr_b);
 
 	// Load the window's pointless easter-egg title.
 	printf("Loading window title...");
-	attr = node->first_attribute(TITLE_ATTR);
-	swapstr = attr->value();
-	c->title = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->title, swapstr);
+	c->title = loadString(c->title, TITLE_ATTR, node, attr);
 	printf(" ...done\n");
 
 //=========================================================================================
@@ -470,37 +477,26 @@ void inline loadUIProperties(UIConfig * c)
 	printf("==LOADING VITAL TEXTURE PATHS==================================================\n");
 	node = node->parent();
 	node = node->first_node(TEX_NODE);
+	printf("\nNODE NAME: %s\n", node->name());
 
 	// Load the filepath of the frame texture.
 	printf("Loading tile frame texture path...");
-	attr = node->first_attribute(FRAME_TEX_ATTR);
-	swapstr = attr->value();
-	c->frame_path = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->frame_path, swapstr);
+	c->frame_path = loadString(c->frame_path, FRAME_TEX_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Load the filepath of the exit warning texture.
 	printf("Loading exit warning texture path...");
-	attr = node->first_attribute(EXIT_ATTR);
-	swapstr = attr->value();
-	c->exit_path = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->exit_path, swapstr);
+	c->exit_path = loadString(c->exit_path, EXIT_ATTR, node, attr);
 	printf(" ...done\n");
 
-	// Load the filepath of the frame texture.
-	printf("Loading overlay texture path...");
-	attr = node->first_attribute(OVR_ATTR);
-	swapstr = attr->value();
-	c->ovr_path = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->ovr_path, swapstr);
+	// Load the filepath of the overlay texture.
+	printf("Loading overlay texture path...");\
+	c->ovr_path = loadString(c->ovr_path, OVR_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Load the filepath of the intro overlay texture.
 	printf("Loading overlay intro texture path...");
-	attr = node->first_attribute(INTR_ATTR);
-	swapstr = attr->value();
-	c->intro_path = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->intro_path, swapstr);
+	c->intro_path = loadString(c->intro_path, INTR_ATTR, node, attr);
 	printf(" ...done\n");
 
 //=========================================================================================
@@ -512,53 +508,36 @@ void inline loadUIProperties(UIConfig * c)
 	printf("==LOADING SHADER SOURCE FILE PATHS=============================================\n");
 	node = node->parent();
 	node = node->first_node(SHD_NODE);
+	printf("\nNODE NAME: %s\n", node->name());
 
 	// Load the vertex shader of the background.
 	printf("Loading BG vertex shader path...");
-	attr = node->first_attribute(BGV_ATTR);
-	swapstr = attr->value();
-	c->bg_v = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->bg_v, swapstr);
+	c->bg_v = loadString(c->bg_v, BGV_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Load the fragment shader of the background.
 	printf("Loading BG fragment shader path...");
-	attr = node->first_attribute(BGF_ATTR);
-	swapstr = attr->value();
-	c->bg_f = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->bg_f, swapstr);
+	c->bg_f = loadString(c->bg_f, BGF_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Load the vertex shader of the hud.
 	printf("Loading HUD vertex shader path...");
-	attr = node->first_attribute(HUDV_ATTR);
-	swapstr = attr->value();
-	c->hud_v = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->hud_v, swapstr);
+	c->hud_v = loadString(c->hud_v, HUDV_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Load the fragment shader of the hud.
 	printf("Loading HUD fragment shader path...");
-	attr = node->first_attribute(HUDF_ATTR);
-	swapstr = attr->value();
-	c->hud_f = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->hud_f, swapstr);
+	c->hud_f = loadString(c->hud_f, HUDF_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Load the vertex shader path of the Tile.
 	printf("Loading Tile vertex shader path...");
-	attr = node->first_attribute(TILEV_ATTR);
-	swapstr = attr->value();
-	c->tile_v = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->tile_v, swapstr);
+	c->tile_v = loadString(c->tile_v, TILEV_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Load the fragment shader path of the Tile.
 	printf("Loading Tile fragment shader path...");
-	attr = node->first_attribute(TILEF_ATTR);
-	swapstr = attr->value();
-	c->tile_f = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->tile_f, swapstr);
+	c->tile_f = loadString(c->tile_f, TILEF_ATTR, node, attr);
 	printf(" ...done\n");
 
 //=========================================================================================
@@ -569,174 +548,112 @@ void inline loadUIProperties(UIConfig * c)
 	printf("==LOADING TILE NODE ATTRIBUTE NAMES============================================\n");
 	node = node->parent();
 	node = node->first_node(TILE_ATTR_NODE);
+	printf("\nNODE NAME: %s\n", node->name());
 
 	// Game node name.
 	printf("Game node name...");
-	attr = node->first_attribute(NN_ATTR);
-	swapstr = attr->value();
-	c->nm = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->nm, swapstr);
+	c->nm = loadString(c->nm, NN_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// active path.
 	printf("Active path attribute name...");
-	attr = node->first_attribute(AP_ATTR);
-	swapstr = attr->value();
-	c->ap = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->ap, swapstr);
+	c->ap = loadString(c->ap, AP_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Inactive path.
 	printf("Inactive path attribute name...");
-	attr = node->first_attribute(IP_ATTR);
-	swapstr = attr->value();
-	c->ip = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->ip, swapstr);
+	c->ip = loadString(c->ip, IP_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// BG path.
 	printf("BG path attribute name...");
-	attr = node->first_attribute(BP_ATTR);
-	swapstr = attr->value();
-	c->bp = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->bp, swapstr);
+	c->bp = loadString(c->bp, BP_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Name.
 	printf("Tile name attribute name...");
-	attr = node->first_attribute(N_ATTR);
-	swapstr = attr->value();
-	c->n = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->n, swapstr);
+	c->n = loadString(c->n, N_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Command.
 	printf("Tile command attribute name...");
-	attr = node->first_attribute(C_ATTR);
-	swapstr = attr->value();
-	c->c = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->c, swapstr);
+	c->c = loadString(c->c, C_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Description.
 	printf("Tile description attribute name...");
-	attr = node->first_attribute(D_ATTR);
-	swapstr = attr->value();
-	c->d = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->d, swapstr);
+	c->d = loadString(c->d, D_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// ID.
 	printf("Tile ID attribute name...");
-	attr = node->first_attribute(I_ATTR);
-	swapstr = attr->value();
-	c->i = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->i, swapstr);
+	c->i = loadString(c->i, I_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// North ID
 	printf("Tile north neighbor ID attribute name...");
-	attr = node->first_attribute(NI_ATTR);
-	swapstr = attr->value();
-	c->ni = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->ni, swapstr);
+	c->ni = loadString(c->ni, NI_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// South ID.
 	printf("Tile south neighbor ID attribute name...");
-	attr = node->first_attribute(SI_ATTR);
-	swapstr = attr->value();
-	c->si = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->si, swapstr);
+	c->si = loadString(c->si, SI_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// East ID.
 	printf("Tile east neighbor ID attribute name...");
-	attr = node->first_attribute(EI_ATTR);
-	swapstr = attr->value();
-	c->ei = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->ei, swapstr);
+	c->ei = loadString(c->ei, EI_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// West ID.
 	printf("Tile west neighbor ID attribute name...");
-	attr = node->first_attribute(WI_ATTR);
-	swapstr = attr->value();
-	c->wi = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->wi, swapstr);
+	c->wi = loadString(c->wi, WI_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Has frame.
 	printf("Tile has frame attribute name...");
-	attr = node->first_attribute(HF_ATTR);
-	swapstr = attr->value();
-	c->hf = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->hf, swapstr);
+	c->hf = loadString(c->hf, HF_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Selectability.
 	printf("Tile selectability attribute name...");
-	attr = node->first_attribute(SELABLE_ATTR);
-	swapstr = attr->value();
-	c->s = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->s, swapstr);
+	c->s = loadString(c->s, SELABLE_ATTR, node, attr);
 	printf(" ...done\n");
 
 
 	// Is first.
 	printf("Loading Tile fragment shader path...");
-	attr = node->first_attribute(IS_ATTR);
-	swapstr = attr->value();
-	c->is = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->is, swapstr);
+	c->is = loadString(c->is, IS_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// X location.
 	printf("Tile X location attribute name...");
-	attr = node->first_attribute(X_ATTR);
-	swapstr = attr->value();
-	c->x = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->x, swapstr);
+	c->x = loadString(c->x, X_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// Y location.
 	printf("Tile Y location attribute name...");
-	attr = node->first_attribute(Y_ATTR);
-	swapstr = attr->value();
-	c->y = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->y, swapstr);
+	c->y = loadString(c->y, Y_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// SX active.
 	printf("Tile SXA attribute name...");
-	attr = node->first_attribute(SXA_ATTR);
-	swapstr = attr->value();
-	c->sxa = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->sxa, swapstr);
+	c->sxa = loadString(c->sxa, SXA_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// SY active.
 	printf("Tile SXA attribute name...");
-	attr = node->first_attribute(SYA_ATTR);
-	swapstr = attr->value();
-	c->sya = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->sya, swapstr);
+	c->sya = loadString(c->sya, SYA_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// SX inactive.
 	printf("Tile SXI attribute name...");
-	attr = node->first_attribute(SXI_ATTR);
-	swapstr = attr->value();
-	c->sxi = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->sxi, swapstr);
+	c->sxi = loadString(c->sxi, SXI_ATTR, node, attr);
 	printf(" ...done\n");
 
 	// SY inactive.
 	printf("Tile SYI attribute name...");
-	attr = node->first_attribute(SYI_ATTR);
-	swapstr = attr->value();
-	c->syi = (char *) malloc( (sizeof(char)*strlen(swapstr))+1);
-	strcpy(c->syi, swapstr);
+	c->syi = loadString(c->syi, SYI_ATTR, node, attr);
 	printf(" ...done\n");
 	
 //=========================================================================================
@@ -747,84 +664,42 @@ void inline loadUIProperties(UIConfig * c)
 	printf("==LOADING BUTTON ASSIGNMENTS===================================================\n");
 	//node = node->parent();
 	node = node->next_sibling(BUTTON_NODE);
+	printf("\nNODE NAME: %s\n", node->name());
 
 	// First shutdown key.
 	printf("Shutdown key A...");
-	attr = node->first_attribute(SDK_A_ATTR);
-	/*if(isWholeNumber(attr->value()))
-	{
-		c->sdk_a = char(atoi(attr->value()));
-	}*/
-	c->sdk_a = attr->value()[0];
+	c->sdk_a = loadChar(SDK_A_ATTR, node, attr);
 	printf(" ...done\n");
-	//printf(" value = \"%s\" [%d]\n", (char)c->sdk_a, (int)c->sdk_a);
 
 
 	// Second shutdown key.
 	printf("Shutdown key B...");
-	attr = node->first_attribute(SDK_B_ATTR);
-	if(isWholeNumber(attr->value()))
-	{
-		c->sdk_b = char(atoi(attr->value()));
-	}
-	c->sdk_b = attr->value()[0];
+	c->sdk_b = loadChar(SDK_B_ATTR, node, attr);
 	printf(" ...done\n");
-	//printf(" value = \"%s\" [%d]\n", (char)c->sdk_b, (int)c->sdk_b);
 
 	// Select key.
 	printf("Select key...");
-	attr = node->first_attribute(SEL_KEY_ATTR);
-	if(isWholeNumber(attr->value()))
-	{
-		c->select = char(atoi(attr->value()));
-	}
-	c->select = attr->value()[0];
+	c->select = loadChar(SEL_KEY_ATTR, node, attr);
 	printf(" ...done\n");
-	//printf(" value = \"%s\" [%d]\n", (char)c->select, (int)c->select);
 
 	// Windowing key.
 	printf("Windowing key...");
-	attr = node->first_attribute(WIN_ATTR);
-	if(isWholeNumber(attr->value()))
-	{
-		c->window = char(atoi(attr->value()));
-	}
-	c->window = attr->value()[0];
+	c->window = loadChar(WIN_ATTR, node, attr);
 	printf(" ...done\n");
-	//printf(" value = \"%s\" [%d]\n", (char)c->window, (int)c->window);
 
 	// Fast shutdown key.
-	printf("Fast shutdown key...");
-	attr = node->first_attribute(SDK_F_ATTR);
-	if(isWholeNumber(attr->value()))
-	{
-		c->sdk_f = char(atoi(attr->value()));
-	}
-	c->sdk_f = attr->value()[0];
+	c->sdk_f = loadChar(SDK_F_ATTR, node, attr);
 	printf(" ...done\n");
-	//printf(" value = \"%s\" [%d]\n", (char)c->sdk_f, (int)c->sdk_f);
 
 	// Next config key.
 	printf("Next config key...");
-	attr = node->first_attribute(NEXT_ATTR);
-	if(isWholeNumber(attr->value()))
-	{
-		c->n_cfg = char(atoi(attr->value()));
-	}
-	c->n_cfg = attr->value()[0];
+	c->n_cfg = loadChar(NEXT_ATTR, node, attr);
 	printf(" ...done\n");
-	//printf(" value = \"%s\" [%d]\n", (char)c->n_cfg, (int)c->n_cfg);
 
 	// Previous config key.
 	printf("Previous config key...");
-	attr = node->first_attribute(PREV_ATTR);
-	if(isWholeNumber(attr->value()))
-	{
-		c->p_cfg = char(atoi(attr->value()));
-	}
-	c->p_cfg = attr->value()[0];
+	c->p_cfg = loadChar(PREV_ATTR, node, attr);
 	printf(" ...done\n");
-	//printf(" value = \"%s\" [%d]\n", (char)c->p_cfg, (int)c->p_cfg);
 
 //=========================================================================================
 // Tile arrangement config file paths.
@@ -839,8 +714,8 @@ void inline loadUIProperties(UIConfig * c)
 	while( node != NULL)
 	{
 		printf("%8d: ", c->paths.size());
-		char* path = (char*) malloc(sizeof(char)*strlen(node->first_attribute(PATH_ATTR)->value()));
-		strcpy(path, node->first_attribute(PATH_ATTR)->value());
+		char * path = NULL;
+		path = loadString(path, PATH_ATTR, node, attr);	
 		c->paths.push_back(path);
 		node = node->next_sibling(CONFIG_NODE);
 		printf("%s\n", c->paths[c->paths.size()-1]);
@@ -852,6 +727,7 @@ void inline loadUIProperties(UIConfig * c)
 		printf("===============================================================================\n");
 		printf("DATA LOADED IS AS FOLLOWS:\n");
 		printConfig(c);
+		printf("===============================================================================\n");
 	}
 }
 #endif
