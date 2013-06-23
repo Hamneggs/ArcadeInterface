@@ -67,14 +67,14 @@ bool TileGrid::addTile(Tile *tile, bool first)
 	}
 
 	// Make sure that the Tile doesn't already exist.
-	for(unsigned int i = 0; i < layers[curLayer]->size(); i ++)
+	/*for(unsigned int i = 0; i < layers[curLayer]->size(); i ++)
 	{
 		if(layers[curLayer]->at(i)->getID() == tile->getID())
 		{
 			printf("Could not add Tile. Duplicate ID.");
 			return false;
 		}
-	}
+	}*/
 
 	// If the tile is marked as being first, we added it to the beginning
 	// of the Layer.
@@ -160,6 +160,7 @@ Renders the Tile grid.
 */
 void TileGrid::render(void)
 {
+	int rendered = 0;
 	// Go through all the Tiles...
 	for(unsigned int i = 0; i < layers[curLayer]->size(); i ++)
 	{
@@ -176,8 +177,12 @@ void TileGrid::render(void)
 		else
 		{
 			layers[curLayer]->at(i)->render();
+			rendered ++;
 		}
 	}
+	char titleString[25];
+	sprintf(titleString, "Tiles rendered: %4d", rendered);
+	glutSetWindowTitle(titleString);
 	handleAnimation();
 }
 
@@ -194,7 +199,6 @@ void TileGrid::changeTiles(Direction dir)
 		return;
 	}
 
-	
 	// Play the movement sound.
 	audio::playMove();
 
@@ -208,13 +212,9 @@ void TileGrid::changeTiles(Direction dir)
 		previousTile = currentTile;
 		currentTile = currentTile->getNeighbor(dir);
 	}
-	//printf("\nCURRENT TILE ID: %d\nPREVIOUS TILE ID: %d", currentTile->getID(), previousTile->getID());
 
-	// Update the states of the Tiles.
-	for(unsigned int i = 0; i < layers[curLayer]->size(); i++)
-	{
-		layers[curLayer]->at(i)->setState(INACTIVE);
-	}
+	// Update the states of the two most important Tiles.
+	previousTile->setState(INACTIVE);
 	currentTile->setState(ACTIVE);
 
 	// Set the deltas so that we can move smoothly between Tiles.
@@ -303,21 +303,19 @@ void TileGrid::shiftBackLayer(void)
 		// consistent background switching.
 		previousTile = currentTile;
 
+		// Turn off the previous Tile.
+		previousTile->setState(INACTIVE);
+
 		// Set the currentTile to the first tile of the new layer.
 		currentTile = layers[curLayer]->at(0);
 
 		// Reset the current Tile.
 		currentTile->setState(ACTIVE);
 
+
 		// Set up the animation deltas so that the screen snaps to the new current Tile.
 		animDeltaX = (.5f-currentTile->getX())/c->anim_frames;
 		animDeltaY = (.5f-currentTile->getY())/c->anim_frames;
-
-		// Update the states of the other Tiles.
-		for(unsigned int i = 0; i < layers[curLayer]->size(); i++)
-		{
-			layers[curLayer]->at(i)->setState(INACTIVE);
-		}
 
 		// Set the current direction to a none NONE value so that the animation handler does a job.
 		curDir=NORTH;
@@ -360,6 +358,9 @@ void TileGrid::shiftForwardLayer(void)
 		// consistent background switching.
 		previousTile = currentTile;
 
+		// Turn off the previous Tile.
+		previousTile->setState(INACTIVE);
+
 		// Set the currentTile to the first tile of the new layer.
 		currentTile = layers[curLayer]->at(0);
 
@@ -369,12 +370,6 @@ void TileGrid::shiftForwardLayer(void)
 		// Set up the animation deltas so that the screen snaps to the new current Tile.
 		animDeltaX = (.5f-currentTile->getX())/c->anim_frames;
 		animDeltaY = (.5f-currentTile->getY())/c->anim_frames;
-
-		// Update the states of the other Tiles.
-		for(unsigned int i = 0; i < layers[curLayer]->size(); i++)
-		{
-			layers[curLayer]->at(i)->setState(INACTIVE);
-		}
 
 		// Set the current direction to a none NONE value so that the animation handler does a job.
 		curDir=NORTH;
@@ -393,21 +388,21 @@ Shifts to a particular layer.
 */
 void TileGrid::setLayer(unsigned int layer)
 {
+	// Range check the new value.
 	curLayer = layer;
 	curLayer%= layers.size();
+
+	// If we can, we set the current Tile to the first one in the layer,
+	// maintaining the previous one. We also set the animation constants.
 	if(layers[curLayer]->size()>0)
 	{
 		currentTile->setState(INACTIVE);
 		previousTile = currentTile;
 		currentTile = layers[curLayer]->at(0);
 		currentTile->setState(ACTIVE);
+		previousTile->setState(INACTIVE);
 		animDeltaX = (.5f-currentTile->getX())/c->anim_frames;
 		animDeltaY = (.5f-currentTile->getY())/c->anim_frames;
-		// Update the states of the Tiles.
-		for(unsigned int i = 0; i < layers[curLayer]->size(); i++)
-		{
-			layers[curLayer]->at(i)->setState(INACTIVE);
-		}
 		currentTile->setState(ACTIVE);
 		curDir=NORTH;
 	}

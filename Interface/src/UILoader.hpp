@@ -80,6 +80,10 @@ Loads tiles from an XML file created by the editor.
 */
 void inline loadTiles(TileGrid * grid, UIConfig * c)
 {
+	rapidxml::xml_node<char> * node = NULL;
+	
+	rapidxml::xml_attribute<char> * attr = NULL;
+
 	for(unsigned int i = 0; i < c->paths.size(); i++)
 	{
 		if(c->ext_tile_rep) printf("\nBeginning Tile Load...");
@@ -108,15 +112,15 @@ void inline loadTiles(TileGrid * grid, UIConfig * c)
 		bool first = false;
 
 		if(c->ext_tile_rep) printf("\nBeginning node iteration...");
-		// Parse through the DOM and create Tiles.
-		rapidxml::xml_node<char> * node = doc.first_node();
-		node = node->first_node(c->nm);
-		rapidxml::xml_attribute<char> * attr = NULL;
 
+		// Parse through the DOM and create Tiles.
+		node = doc.first_node();
+		node = node->first_node(c->nm);
+		attr = NULL;
+
+		// Create a new layer for the current Tile layout.
 		grid->addLayer();
-		printf("Changing layers... current: %d, total %d\n", grid->getCurrentLayer(), grid->getNumLayers());
 		grid->setLayer(i);
-		printf("Changed layers... current: %d, total %d\n", grid->getCurrentLayer(), grid->getNumLayers());
 
 		while( node != NULL)
 		{
@@ -298,7 +302,10 @@ void inline loadTiles(TileGrid * grid, UIConfig * c)
 		}
 	}
 	grid->setLayer(0);
-	printf("Layer: %d\nP: %10s\nC:%10s\n", grid->getCurrentLayer(), grid->getPrevious()->getName(), grid->getCurrent()->getName());
+	printf("Layer: %d\nP: %10s\nC:%10s\n", grid->getCurrentLayer(), grid->getPrevious()->getName(), grid->getCurrent()->getName());	
+	/*
+	free(node);
+	free(attr);*/
 }
 
 void inline loadUIProperties(UIConfig * c)
@@ -314,12 +321,6 @@ void inline loadUIProperties(UIConfig * c)
 	// Get the first node of the DOM so we can have a point of reference for navigation.
 	rapidxml::xml_node<char> * node = doc.first_node();
 	rapidxml::xml_attribute<char> * attr = NULL;
-
-	// Create a swapspace int to load booleans from integer values.
-	int swapint = 0;
-
-	// Create a swapspace C-String for memory allocation.
-	char * swapstr;
 
 //=========================================================================================
 // Tile and shader loading preferences.
@@ -433,22 +434,22 @@ void inline loadUIProperties(UIConfig * c)
 
 	// Load the X Resolution of the application.
 	printf("Loading X resolution...");
-	c->x_res = loadFloat(X_RES_ATTR, node, attr);
+	c->x_res = loadInt(X_RES_ATTR, node, attr);
 	printf("value = %d\n", c->x_res);
 	
 	// Load the Y Resolution of the application.
 	printf("Loading Y resolution...");
-	c->y_res = loadFloat(Y_RES_ATTR, node, attr);
+	c->y_res = loadInt(Y_RES_ATTR, node, attr);
 	printf("value = %d\n", c->y_res);
 
 	// Load the window location X coordinate.
 	printf("Loading window X location...");
-	c->win_x = loadFloat(WIN_X_ATTR, node, attr);
+	c->win_x = loadInt(WIN_X_ATTR, node, attr);
 	printf("value = %d\n", c->win_x);
 
 	// Load the window location Y coordinate.
 	printf("Loading window X location...");
-	c->win_y = loadFloat(WIN_Y_ATTR, node, attr);
+	c->win_y = loadInt(WIN_Y_ATTR, node, attr);
 	printf("value = %d\n", c->win_y);
 
 	// Load the application's fullscreen status.
@@ -729,5 +730,8 @@ void inline loadUIProperties(UIConfig * c)
 		printConfig(c);
 		printf("===============================================================================\n");
 	}
+
+	free(node);
+	free(attr);
 }
 #endif

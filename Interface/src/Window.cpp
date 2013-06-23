@@ -82,26 +82,32 @@ namespace window
 	bool createWindow(void)
 	{
 		
-		glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
+		// Set up our window to have a color buffer and have it double buffered.
+		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
 
-
+		// Set the size and position of the window.
 		glutInitWindowSize(c->x_res, c->y_res);
 		glutInitWindowPosition(c->win_x, c->win_y);
 
 		
-		// Create the actual window.
+		// Create the window.
 		glutCreateWindow(c->title);
+
+		// Remove the cursor when it is over the window.
 		glutSetCursor(GLUT_CURSOR_NONE);
+
+		// Store the fullscreen variable for switching awareness.
 		fullscreen = c->fullscr;
+
+		// Make the window fullscreen if necessary.
 		if(fullscreen) glutFullScreen();
 
 		// Set a basic clear color for OpenGL.
 		glClearColor(c->clr_r, c->clr_g, c->clr_b, 1);
 
+		// Enable alpha rendering.
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-
-		
 
 		// FUCKING ENABLE DEPTH TESTING.
 		glEnable(GL_DEPTH_TEST);
@@ -132,7 +138,7 @@ namespace window
 		if(glutGetWindow() == 0) return;
 
 		// Update the FPS at the titlebar of the window.
-		updateFPS();
+		//updateFPS();
 
 		// Blank the screen.
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -155,8 +161,8 @@ namespace window
 			hud->render();
 		}
 
-		// Swap buffers. This prevents screen-tearing by blitting a complete framebuffer to the screen as fast as possible
-		// while the other is being operated on.
+		// Swap buffers. Double buffering guarantees that a complete buffer is sent to 
+		// the screen during vblank, preventing tearing.
 		glutSwapBuffers();
 	}
 
@@ -168,6 +174,9 @@ namespace window
 		bg = background;
 	}
 
+	/*
+	Assigns the TileGrid that we need to render.
+	*/
 	void setGrid(TileGrid * newGrid)
 	{
 		grid = newGrid;
