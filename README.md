@@ -55,8 +55,7 @@ until I need to distribute.
 
 Running the Included Build
 ==========================
-* Copy the assets/ directory into the same folder as the .exe
-* Get any other .dlls it whines about.
-* Run! Woohoo!
+* Run the .exe in the bin/ directory. Woohoo!
+* Get any other .dlls you need. I'm still working on minimizing them.
 While the program may run, you need to configure the command of each Tile to do what you want. 
 I doubt that you are going to have your roms in the samde directory as mine, for example.
