@@ -4,7 +4,7 @@
 #include "const.h"
 #include "UIConfig.h"
 #include "SFX.h"
-
+#include <omp.h>
 /*
 This class represents a grid of Tiles (obviously.) This class tracks the
 location and state of all Tiles and maintains a Tile reference that continuously

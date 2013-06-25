@@ -56,6 +56,8 @@ namespace window
 		glutInit(&argc, argv);
 		createWindow();
 
+		glewExperimental = GL_TRUE;
+
 		// Now that GLUT is initialized, we can initialize GLEW.
 		GLenum err = glewInit();
 		if (GLEW_OK != err)
@@ -219,7 +221,7 @@ namespace window
 			// If the current Tile's state is above 1.0 (EXECUTE range) we execute the command.
 			// The UI halts until that call is returned, at which point we remake the window
 			// visible and set it to fullscreen if necessary.
-			if(grid->getCurrent()->getState() > 1.0)
+			if(grid->getCurrent()->getIntendedState() == EXECUTE)
 			{
 				grid->getCurrent()->setState(ACTIVE);
 				printf("\ncommand: %s\n", grid->getCurrent()->getCommand());

@@ -84,7 +84,7 @@ void inline loadTiles(TileGrid * grid, UIConfig * c)
 	
 	rapidxml::xml_attribute<char> * attr = NULL;
 
-	for(unsigned int i = 0; i < c->paths.size(); i++)
+	for(int i = 0; i < c->paths.size(); i++)
 	{
 		if(c->ext_tile_rep) printf("\nBeginning Tile Load...");
 	
@@ -250,7 +250,7 @@ void inline loadTiles(TileGrid * grid, UIConfig * c)
 			if(c->ext_tile_rep) printf(" [value: %s]", attr->value());
 					t->initNeighbors((Tile*)unsigned int(atoi(attr->value())), NULL, NULL, NULL);
 			if(c->ext_tile_rep) printf("\n\t\t...done");
-
+			 
 			if(c->ext_tile_rep) printf("\n\tLoading %s", c->si);
 			attr = node->first_attribute(c->si);
 			if(c->ext_tile_rep) printf(" [value: %s]", attr->value());

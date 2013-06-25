@@ -161,6 +161,11 @@ public:
 	float getState(void);
 
 	/*
+	Returns the intended state of the Tile.
+	*/
+	State getIntendedState(void);
+
+	/*
 	Returns the ID of the Tile.
 	*/
 	unsigned int getID(void);

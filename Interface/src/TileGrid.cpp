@@ -82,7 +82,8 @@ bool TileGrid::addTile(Tile *tile, bool first)
 	{
 		// Since it is first it must be made active, and all other Tiles must
 		// be made inactive.
-		for(unsigned int i = 0; i < layers[curLayer]->size(); i ++)
+		#pragma omp parallel for
+		for(int i = 0; i < layers[curLayer]->size(); i ++)
 		{
 			layers[curLayer]->at(i)->setState(INACTIVE);
 		}
@@ -487,7 +488,9 @@ Moves all tiles by a specific amount.
 */
 void TileGrid::changeTilesLocation(float changeX, float changeY)
 {
-	for(unsigned int i = 0; i < layers[curLayer]->size(); i++)
+	int max = (int)layers[curLayer]->size();
+	#pragma omp parallel for
+	for(int i = 0; i < max; i++)
 	{
 		layers[curLayer]->at(i)->changeLocation(changeX, changeY);
 	}

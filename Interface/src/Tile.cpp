@@ -391,6 +391,14 @@ float Tile::getState(void)
 }
 
 /*
+Returns the intended state of the Tile.
+*/
+State Tile::getIntendedState(void)
+{
+	return intendedState;
+}
+
+/*
 Returns the ID of the Tile.
 */
 unsigned int Tile::getID(void)
