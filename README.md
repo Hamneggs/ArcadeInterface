@@ -10,7 +10,7 @@ Features
 * Each tile can be extensively customized.
 * Low memory requirements(depending on tile images)
 * No platform-binding dependencies.
-* Smooth navigation and simple effects.
+* Smooth navigation and enticing yet simple effects.
 * Uses OpenGL 2.0 to support a wide range of graphics hardware.
 
 Tile Customization
