@@ -16,7 +16,7 @@ Initializes the HUD's UV and location buffers, as well as creates its shaders.
 */
 bool Hud::init(float x, float y, float sx, float sy, UIConfig * c)
 {
-
+	printf("\nInitializing hud...");
 	// Internalize all parameters.
 	this->x = x;
 	this->y = y;

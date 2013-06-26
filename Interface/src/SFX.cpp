@@ -45,7 +45,7 @@ namespace audio
 		c = newConfig;
 
 		// Create the sound engine.
-		engine = irrklang::createIrrKlangDevice();
+		engine = irrklang::createIrrKlangDevice(irrklang::ESOD_AUTO_DETECT);
 
 		// If something went wrong creating the engine we return a bad mark.
 		if(!engine) return false;

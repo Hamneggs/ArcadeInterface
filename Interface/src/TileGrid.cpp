@@ -20,6 +20,7 @@ Initializes the storage components of the grid.
 */
 bool TileGrid::init(UIConfig * c)
 {
+	printf("\nInitializing grid...");
 	this->c = c;
 	layers = std::vector<std::vector<Tile *> *>();
 	curLayer = 0;
@@ -31,13 +32,22 @@ Initializes the GL components of the grid.
 */
 bool TileGrid::initGLComponents(void)
 {
+	printf("\nInitializing grid GL...");
+	printf(" ft");
 	frameTexture.loadTextureImage(c->frame_path, false, GL_BGRA);
+	printf(" sf");
 	frameTexture.setFiltering(GL_NEAREST, GL_NEAREST);
+	printf(" lv");
 	tileVert.loadShader(c->tile_v, GL_VERTEX_SHADER, c->ext_shader_rep);
+	printf(" lf");
 	tileFrag.loadShader(c->tile_f, GL_FRAGMENT_SHADER, c->ext_shader_rep);
+	printf(" cp");
 	tileProgram.createProgram();
+	printf(" av");
 	tileProgram.attachShaderToProgram(&tileVert);
+	printf(" af");
 	tileProgram.attachShaderToProgram(&tileFrag);
+	printf(" lnk\n");
 	tileProgram.linkProgram();
 	return tileProgram.isLinked();
 }
@@ -489,7 +499,6 @@ Moves all tiles by a specific amount.
 void TileGrid::changeTilesLocation(float changeX, float changeY)
 {
 	int max = (int)layers[curLayer]->size();
-	#pragma omp parallel for
 	for(int i = 0; i < max; i++)
 	{
 		layers[curLayer]->at(i)->changeLocation(changeX, changeY);

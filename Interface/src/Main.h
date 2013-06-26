@@ -1,4 +1,5 @@
 #pragma once
+#define GLEW_STATIC
 #define _CRT_SECURE_NO_WARNINGS // I'm bloody tired of reading that strcpy is unsafe.
 #include <stdio.h>
 #include "Window.h"

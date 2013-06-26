@@ -218,6 +218,9 @@ namespace window
 		// If the window is finally fucking gone...
 		if(state == GLUT_NOT_VISIBLE)
 		{
+			// Stop the audio no matter what.
+			audio::stopBGM();
+			
 			// If the current Tile's state is above 1.0 (EXECUTE range) we execute the command.
 			// The UI halts until that call is returned, at which point we remake the window
 			// visible and set it to fullscreen if necessary.
@@ -225,7 +228,6 @@ namespace window
 			{
 				grid->getCurrent()->setState(ACTIVE);
 				printf("\ncommand: %s\n", grid->getCurrent()->getCommand());
-				audio::stopBGM();
 				if(grid->getCurrent()->isSelectable())
 				{
 					system(grid->getCurrent()->getCommand());
@@ -234,6 +236,11 @@ namespace window
 				window::setFullScreen(c->fullscr);
 				audio::startBGM();
 			}
+		}
+
+		if(state == GLUT_VISIBLE)
+		{
+			audio::startBGM();
 		}
 	}
 
