@@ -130,21 +130,21 @@ GLchar* Shader::loadTextFile(char* filename)
 		return 0;
 	}
 	
-	printf("seeking");
+	printf("seeking ");
 	// Now we get the size of the file in bytes using fseek().
 	// Move the pointer to the end of the file.
 	fseek(fileHandle, 0, SEEK_END);
 	
-	printf("sizing");
+	printf("sizing ");
 	// Now we can use the location of the pointer to tell the size of the file.
 	long size = ftell(fileHandle);
 	
-	printf("returning");
+	printf("returning ");
 	// Finally we return the carat back to the beginning of the file
 	// for reading.
 	fseek(fileHandle, 0, SEEK_SET);
 	
-	printf("allocating");
+	printf("allocating ");
 	// Create a string to hold the file's text.
 	char * fileContents = (char*) malloc ( size*sizeof(char) );
 	
@@ -153,15 +153,14 @@ GLchar* Shader::loadTextFile(char* filename)
 	// Create a string to hold the current line.
 	char line[80];
 	
-	printf("reading");
+	printf("reading ");
 	// Load the lines from the file and concatenate them
 	// into our storage string.
 	while(fgets(line, 80, fileHandle) != NULL){
-		char * curLine = line;
-		strncat_s(fileContents, size, curLine, 80);
+		strncat(fileContents, line, 80);
 	}
 
-	printf("closing");
+	printf("closing\n");
 	fclose(fileHandle);
 	return fileContents;
 }
