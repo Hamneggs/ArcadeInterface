@@ -60,7 +60,7 @@ On Linux
 I haven't yet tried to build this code on an OS that carries a blue blanket, but it should just
 require swapping out the included Windows builds of the dependencies with their Linux equivalents,
 then building with whatever compiler you want. Don't whine to me about it though if it's not the code's 
-fault.
+fault. You will probably want to have way with the include guards, however.
 
 Running the Included Build
 ==========================
