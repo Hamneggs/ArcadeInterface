@@ -16,7 +16,7 @@ Initializes the HUD's UV and location buffers, as well as creates its shaders.
 */
 bool Hud::init(float x, float y, float sx, float sy, UIConfig * c)
 {
-	printf("\nInitializing hud...");
+	printf("Initializing hud...");
 	// Internalize all parameters.
 	this->x = x;
 	this->y = y;
@@ -43,13 +43,10 @@ bool Hud::init(float x, float y, float sx, float sy, UIConfig * c)
 	bool imageLoaded = false;
 	if(c->ovr_path != NULL)
 	{
-		if(c->ext_tile_rep) printf("\nPATH: %s\n", c->ovr_path);
-		if(c->ext_tile_rep) printf("\tloading image...");
 		imageLoaded = hudTexture.loadTextureImage(c->ovr_path, false, GL_BGRA);
 		if(!imageLoaded){
 			printf("HUD TEXTURE: %s\nERROR: Could not load HUD texture.\n", c->ovr_path);
 		}
-		if(c->ext_tile_rep) printf("\tsetting parameters...");
 		hudTexture.setFiltering(GL_LINEAR, GL_LINEAR);
 		hudTexture.setSamplerParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		hudTexture.setSamplerParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -59,13 +56,10 @@ bool Hud::init(float x, float y, float sx, float sy, UIConfig * c)
 	// Load the exit warning image.
 	if(c->exit_path != NULL)
 	{
-		if(c->ext_tile_rep) printf("\nPATH: %s\n", c->exit_path);
-		if(c->ext_tile_rep) printf("\tloading image...");
 		imageLoaded = warning.loadTextureImage(c->exit_path, false, GL_BGRA);
 		if(!imageLoaded){
 			printf("BACKGROUND ERROR TEXTURE: %s\nERROR: Could not load BG WARNING texture.\n");
 		}
-		if(c->ext_tile_rep) printf("\tsetting parameters...");
 		warning.setFiltering(GL_NEAREST, GL_LINEAR);
 		warning.setSamplerParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		warning.setSamplerParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -75,19 +69,16 @@ bool Hud::init(float x, float y, float sx, float sy, UIConfig * c)
 	// Load the introduction image.
 	if(c->intro_path != NULL)
 	{
-		if(c->ext_tile_rep) printf("\nPATH: %s\n", c->intro_path);
-		if(c->ext_tile_rep) printf("\tloading image...");
 		imageLoaded = intro.loadTextureImage(c->intro_path, false, GL_BGRA);
 		if(!imageLoaded){
 			printf("BACKGROUND ERROR TEXTURE: %s\nERROR: Could not load INTRO OVERLAY texture.\n");
 		}
-		if(c->ext_tile_rep) printf("\tsetting parameters...");
 		intro.setFiltering(GL_NEAREST, GL_LINEAR);
 		intro.setSamplerParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		intro.setSamplerParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		intro.setSamplerParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 	}
-	else printf("\n\n\n OH SHIT INTRO NOT LOADED AH FUCK\n\n\n");
+	printf("...done\n");
 
 	return program.isLinked() && imageLoaded;
 }

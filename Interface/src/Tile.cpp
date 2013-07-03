@@ -142,8 +142,6 @@ bool Tile::initImages(char * activePath, char * inactivePath, char * bgPath)
 
 	if(activePath != NULL)
 	{
-		if(c->ext_tile_rep) printf("\nPATH: %s\n", activePath);
-		if(c->ext_tile_rep) printf("\tloading image...");
 		// Load the background image and display a warning if shit goes wrong.
 		imageLoaded = active.loadTextureImage(activePath, false, GL_BGRA);
 		if(!imageLoaded){
@@ -151,7 +149,6 @@ bool Tile::initImages(char * activePath, char * inactivePath, char * bgPath)
 			success = false;
 		}
 
-		if(c->ext_tile_rep) printf("\tsetting parameters...");
 		// Set the filtering of the texture to be "nearest-neighbor" filtered when magnified to preserve native pixels,
 		// and to be bilinearly filtered when minified to not look retarded.
 		active.setFiltering(GL_NEAREST, GL_LINEAR);
@@ -161,41 +158,32 @@ bool Tile::initImages(char * activePath, char * inactivePath, char * bgPath)
 		active.setSamplerParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		active.setSamplerParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		active.setSamplerParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-		if(c->ext_tile_rep) printf("\tdone.");
 	}
 
 	if(inactivePath != NULL)
 	{
-		if(c->ext_tile_rep) printf("\nPATH: %s\n", inactivePath);
-		if(c->ext_tile_rep) printf("\tloading image...");
 		imageLoaded = inactive.loadTextureImage(inactivePath, false, GL_BGRA);
 		if(!imageLoaded){
 			printf("TILE ID: %d\nTILE NAME: %s\nERROR: Could not load inactive texture.\nPATH: %s", id, name, inactivePath);
 			success = false;
 		}
-		if(c->ext_tile_rep) printf("\tsetting parameters...");
 		inactive.setFiltering(GL_NEAREST, GL_LINEAR);
 		inactive.setSamplerParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		inactive.setSamplerParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		inactive.setSamplerParameter(GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-		if(c->ext_tile_rep) printf("\tdone.");
 	}
 
 	if(bgPath != NULL)
 	{
-		if(c->ext_tile_rep) printf("\nPATH: %s\n", bgPath);
-		if(c->ext_tile_rep) printf("\tloading image...");
 		imageLoaded = bg.loadTextureImage(bgPath, false, GL_BGRA);
 		if(!imageLoaded){
 			printf("TILE ID: %d\nTILE NAME: %s\nERROR: Could not load background texture.\nPATH: %s", id, name, bgPath);
 			success = false;
 		}
-		if(c->ext_tile_rep) printf("\tsetting parameters...");
 		bg.setFiltering(GL_NEAREST, GL_LINEAR);
 		bg.setSamplerParameter(GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
 		bg.setSamplerParameter(GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 		bg.setSamplerParameter(GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT);
-		if(c->ext_tile_rep) printf("\tdone.");
 	}
 
 	return success;

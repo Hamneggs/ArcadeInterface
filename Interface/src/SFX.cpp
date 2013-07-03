@@ -45,11 +45,17 @@ namespace audio
 		c = newConfig;
 
 		// Create the sound engine.
+		printf("==SOUND DEVICE CREATION========================================================\n");
 		engine = irrklang::createIrrKlangDevice(irrklang::ESOD_AUTO_DETECT);
 
 		// If something went wrong creating the engine we return a bad mark.
-		if(!engine) return false;
-
+		if(!engine)
+		{
+			printf("Could not create sound engine. Do you have a sound device plugged in?\n");
+			printf("===============================================================================\n");
+			printf("Done initializing sound.\n\n");
+			return false;
+		}
 		// Set the overall volume to that specified.
 		engine->setSoundVolume(c->vol);
 
@@ -73,6 +79,8 @@ namespace audio
 		moveSource->setDefaultVolume(c->m_vol);
 		rejectionSource->setDefaultVolume(c->r_vol);
 		
+		printf("===============================================================================\n\n\n");
+		printf("Done initializing sound.\n\n");
 		return true;
 	}
 

@@ -32,7 +32,7 @@ bool Shader::loadShader(char * sFile, int a_iType, bool extended)
 	iType = a_iType; 
 
 	if(extended){
-		printf("================================================================\n");
+		printf("\n================================================================\n");
 		printf("%2s STATUS:\n", filename);
 		printf("================================================================\n");
 	}
@@ -97,6 +97,7 @@ bool Shader::loadShader(char * sFile, int a_iType, bool extended)
 		GLint actualsize = 0;
 		glGetShaderInfoLog(uiShader, strlen(errorLog), &actualsize, errorLog);
 		if(extended) printf("%2s\n", errorLog);
+		if(extended) printSource();
 
 	}
 	else{
@@ -122,29 +123,23 @@ GLchar* Shader::loadTextFile(char* filename)
 	// file with the name given to us.
 	// We open it with "rt" privledges, meaning that we 
 	// can merely read it.
-
-	printf("\nopening ");
 	fileHandle = fopen(filename, "r");
 	if(fileHandle == NULL)
 	{
 		return 0;
 	}
 	
-	printf("seeking ");
 	// Now we get the size of the file in bytes using fseek().
 	// Move the pointer to the end of the file.
 	fseek(fileHandle, 0, SEEK_END);
 	
-	printf("sizing ");
 	// Now we can use the location of the pointer to tell the size of the file.
 	long size = ftell(fileHandle);
 	
-	printf("returning ");
 	// Finally we return the carat back to the beginning of the file
 	// for reading.
 	fseek(fileHandle, 0, SEEK_SET);
 	
-	printf("allocating ");
 	// Create a string to hold the file's text.
 	char * fileContents = (char*) malloc ( size*sizeof(char) );
 	
@@ -153,14 +148,12 @@ GLchar* Shader::loadTextFile(char* filename)
 	// Create a string to hold the current line.
 	char line[80];
 	
-	printf("reading ");
 	// Load the lines from the file and concatenate them
 	// into our storage string.
 	while(fgets(line, 80, fileHandle) != NULL){
 		strncat(fileContents, line, 80);
 	}
 
-	printf("closing\n");
 	fclose(fileHandle);
 	return fileContents;
 }

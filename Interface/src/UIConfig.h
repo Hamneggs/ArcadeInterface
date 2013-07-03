@@ -86,7 +86,7 @@ Prints the contents of a config struct in a concise manner.
 */
 void inline printConfig(UIConfig * c)
 {
-	printf("\nWindow:\n");
+	printf("Window:\n");
 	printf("Resolution: X=%4d Y=%4d\n", c->x_res, c->y_res);
 	printf("Location: X=%4d Y=%4d\n", c->win_x, c->win_y);
 	printf("Run fullscreen? %d\n", c->fullscr);
@@ -124,35 +124,35 @@ void inline printConfig(UIConfig * c)
 	printf("Shutdown Time (Millis) %d\n", c->shutdown_time);
 	printf("Play intro? %d\n", c->play_intro);
 
-	printf("\nTile Attribute Names\n");
-	printf("Game Node Name:  %s\n",c->nm);
-	printf("Active Path:	  %s\n",c->ap);
-	printf("Inactive Path:	%s\n",c->ip);
-	printf("BG Path:			%s\n",c->bp);
-	printf("Name:				%s\n",c->n);
-	printf("Command:			%s\n",c->c);
-	printf("Description:	  %s\n",c->d);
-	printf("ID:				  %s\n",c->i);
-	printf("North ID:		  %s\n",c->ni);
-	printf("South ID:		  %s\n",c->si);
-	printf("East ID:			%s\n",c->ei);
-	printf("West ID:			%s\n",c->wi);
-	printf("Has Frame?:		%s\n",c->hf);
-	printf("Is First?:		 %s\n",c->is);
-	printf("X location:		%s\n",c->x);
-	printf("Y location:		%s\n",c->y);
-	printf("Active W:		  %s\n",c->sxa);
-	printf("Active H:		  %s\n",c->sya);
-	printf("Inactive W:		%s\n",c->sxi);
-	printf("Inactive H:		%s\n",c->syi);
-	printf("Selectable?:	  %s\n",c->s);
+	printf("\nTile Attribute Names:\n");
+	printf("Game Node Name: %s\n",c->nm);
+	printf("Active Path: %s\n",c->ap);
+	printf("Inactive Path: %s\n",c->ip);
+	printf("BG Path: %s\n",c->bp);
+	printf("Name: %s\n",c->n);
+	printf("Command: %s\n",c->c);
+	printf("Description: %s\n",c->d);
+	printf("ID: %s\n",c->i);
+	printf("North ID: %s\n",c->ni);
+	printf("South ID: %s\n",c->si);
+	printf("East ID: %s\n",c->ei);
+	printf("West ID: %s\n",c->wi);
+	printf("Has Frame?: %s\n",c->hf);
+	printf("Is First?: %s\n",c->is);
+	printf("X location: %s\n",c->x);
+	printf("Y location: %s\n",c->y);
+	printf("Active W: %s\n",c->sxa);
+	printf("Active H: %s\n",c->sya);
+	printf("Inactive W: %s\n",c->sxi);
+	printf("Inactive H: %s\n",c->syi);
+	printf("Selectable?: %s\n",c->s);
 
 	printf("\nButton Assignments:\n");
-	printf("Shutdown A:		%s\n", &c->sdk_a);
-	printf("Shutdown B:		%s\n", &c->sdk_b);
-	printf("Fast Shutdown:	%s\n", &c->sdk_f);
-	printf("Selection:		 %s\n", &c->select);
-	printf("Windowed Mode:	%s\n", &c->window);
-	printf("Next Config:	  %s\n", &c->n_cfg);
+	printf("Shutdown A: %s\n", &c->sdk_a);
+	printf("Shutdown B: %s\n", &c->sdk_b);
+	printf("Fast Shutdown: %s\n", &c->sdk_f);
+	printf("Selection: %s\n", &c->select);
+	printf("Windowed Mode: %s\n", &c->window);
+	printf("Next Config: %s\n", &c->n_cfg);
 	printf("Previous Config: %s\n", &c->p_cfg);
 }

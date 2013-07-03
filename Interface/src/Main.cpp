@@ -19,12 +19,11 @@ int main(int argc, char * argv[])
 
 	// Initialize the sound engine.
 	audio::init(&cfg);
-
-	// Assign our TileGrid instance to the window.
-	window::setGrid(&grid);
-
+	
 	// Initialize the window.
 	window::init(argc, argv, &cfg);
+
+	printf("==INITIALIZING APPLICATION COMPONENTS==========================================\n");
 
 	// Initialize the TileGrid.
 	grid.init(&cfg);
@@ -34,14 +33,21 @@ int main(int argc, char * argv[])
 
 	// Initialize our Hud instance.
 	hud.init(.5, .5, 1, 1, &cfg);
-	window::setHUD(&hud);
-	
-	// Load the Tile properties from file.
-	if(cfg.ext_tile_rep)printf("\nREPORTING TILES.\n");
-	loadTiles(&grid, &cfg);
 
 	// Initialize the background.
 	bg.init(&grid, &cfg); 
+
+	printf("===============================================================================\n");
+	printf("Done initializing components.\n\n");
+
+	// Assign our TileGrid instance to the window.
+	window::setGrid(&grid);
+
+	// Assign the HUD to the window.
+	window::setHUD(&hud);
+	
+	// Load the Tile properties from file.
+	loadTiles(&grid, &cfg);
 	
 	// Initialize the input code.
 	input::init(&grid, &hud, &bg, &cfg);

@@ -20,10 +20,11 @@ Initializes the storage components of the grid.
 */
 bool TileGrid::init(UIConfig * c)
 {
-	printf("\nInitializing grid...");
+	printf("Initializing grid...");
 	this->c = c;
 	layers = std::vector<std::vector<Tile *> *>();
 	curLayer = 0;
+	printf(" ...done\n");
 	return true;
 }
 
@@ -32,23 +33,16 @@ Initializes the GL components of the grid.
 */
 bool TileGrid::initGLComponents(void)
 {
-	printf("\nInitializing grid GL...");
-	printf(" ft");
+	printf("Initializing grid GL...");
 	frameTexture.loadTextureImage(c->frame_path, false, GL_BGRA);
-	printf(" sf");
 	frameTexture.setFiltering(GL_NEAREST, GL_NEAREST);
-	printf(" lv");
 	tileVert.loadShader(c->tile_v, GL_VERTEX_SHADER, c->ext_shader_rep);
-	printf(" lf");
 	tileFrag.loadShader(c->tile_f, GL_FRAGMENT_SHADER, c->ext_shader_rep);
-	printf(" cp");
 	tileProgram.createProgram();
-	printf(" av");
 	tileProgram.attachShaderToProgram(&tileVert);
-	printf(" af");
 	tileProgram.attachShaderToProgram(&tileFrag);
-	printf(" lnk\n");
 	tileProgram.linkProgram();
+	printf(" ...done\n");
 	return tileProgram.isLinked();
 }
 
@@ -77,14 +71,14 @@ bool TileGrid::addTile(Tile *tile, bool first)
 	}
 
 	// Make sure that the Tile doesn't already exist.
-	/*for(unsigned int i = 0; i < layers[curLayer]->size(); i ++)
+	for(unsigned int i = 0; i < layers[curLayer]->size(); i ++)
 	{
 		if(layers[curLayer]->at(i)->getID() == tile->getID())
 		{
 			printf("Could not add Tile. Duplicate ID.");
 			return false;
 		}
-	}*/
+	}
 
 	// If the tile is marked as being first, we added it to the beginning
 	// of the Layer.
@@ -93,7 +87,7 @@ bool TileGrid::addTile(Tile *tile, bool first)
 		// Since it is first it must be made active, and all other Tiles must
 		// be made inactive.
 		#pragma omp parallel for
-		for(int i = 0; i < layers[curLayer]->size(); i ++)
+		for(unsigned int i = 0; i < layers[curLayer]->size(); i ++)
 		{
 			layers[curLayer]->at(i)->setState(INACTIVE);
 		}
@@ -109,10 +103,6 @@ bool TileGrid::addTile(Tile *tile, bool first)
 		currentTile->setState(ACTIVE);
 		animDeltaX = (.5f-currentTile->getX())/c->anim_frames;
 		animDeltaY = (.5f-currentTile->getY())/c->anim_frames;
-		
-		// Set the current direction to one that is not NONE so that the 
-		// animation handler knows to move the Tiles.
-		//curDir = SOUTH;
 	}
 
 	// If the Tile is not marked as being First, we just push it to the back 
@@ -137,10 +127,6 @@ bool TileGrid::addTile(Tile *tile, bool first)
 
 		// Since it is the current Tile we should make it active.
 		currentTile->setState(ACTIVE);
-
-		// Set the current direction to a non-NONE value so that the animation
-		// handler does its job.
-		//curDir = SOUTH;
 	}
 
 	// If there is no previous Tile we create one.

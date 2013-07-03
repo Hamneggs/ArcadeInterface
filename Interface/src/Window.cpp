@@ -51,7 +51,8 @@ namespace window
 	{
 		// Store a reference to the config struct.
 		c = config;
-
+		
+		printf("==WINDOW INITIALIZATION========================================================\n");
 		// Initialize GLUT, and the GLUT window.
 		glutInit(&argc, argv);
 		createWindow();
@@ -63,16 +64,22 @@ namespace window
 		if (GLEW_OK != err)
 		{
 			/* Problem: glewInit failed, something is seriously wrong. */
-			printf("Error: %s\n", glewGetErrorString(err));
+			printf("Error: %s\n", glewGetErrorString(err));			
+			printf("===============================================================================\n");
+			printf("Done initializing sound.\n\n");
 			return false;
 		}
 		else
 		{
-			printf("Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
-			printf("X: %d, Y: %d \n", c->x_res, c->y_res);
-
+			printf("GLEW VERSION: %s\n", glewGetString(GLEW_VERSION));
+			printf("GL VERSION: %s\n", glGetString(GL_VERSION));
+			printf("GL VENDOR: %s\n", glGetString(GL_VENDOR));
+			printf("GLSL VERSION: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+			printf("RENDERER: %s\n", glGetString(GL_RENDERER));
 		}
-
+		
+		printf("===============================================================================\n");
+		printf("Done initializing window.\n\n");
 		return true;
 
 	}
@@ -90,10 +97,12 @@ namespace window
 		// Set the size and position of the window.
 		glutInitWindowSize(c->x_res, c->y_res);
 		glutInitWindowPosition(c->win_x, c->win_y);
-
 		
 		// Create the window.
 		glutCreateWindow(c->title);
+
+		// Give the window an icon
+		glutSetIconTitle("assets\\images\\dependent\\icon.png");
 
 		// Remove the cursor when it is over the window.
 		glutSetCursor(GLUT_CURSOR_NONE);

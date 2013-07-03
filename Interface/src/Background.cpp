@@ -20,7 +20,7 @@ required reference to a TileGrid. Also initializes the currentTime pointer.
 */
 bool Background::init(TileGrid * grid, UIConfig * c)
 {
-	printf("\nInitializing background...");
+	printf("Initializing background...");
 	// Initialize the vertex and UV buffers.
 	initBuffers();
 
@@ -36,6 +36,7 @@ bool Background::init(TileGrid * grid, UIConfig * c)
 	program.attachShaderToProgram(&vert);
 	program.attachShaderToProgram(&frag);
 	program.linkProgram();
+	printf("...done\n");
 	return program.isLinked();
 	
 }
