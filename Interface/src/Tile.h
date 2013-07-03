@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TILE_INCLUDED
+#define TILE_INCLUDED
 #include "GLTexture.h"
 #include "Shaders.h"
 #include "const.h"
@@ -336,3 +337,4 @@ private:
 	*/
 	UIConfig * c;
 };
+#endif

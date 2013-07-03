@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WINDOW_INCLUDED
+#define WINDOW_INCLUDED
 #include <glew.h>
 #include <stdlib.h>
 #include <gl\glut.h>
@@ -69,3 +70,4 @@ Returns whether or not the application is currently running fullscreen/exclusive
 */
 bool getFullScreen(void);
 }
+#endif

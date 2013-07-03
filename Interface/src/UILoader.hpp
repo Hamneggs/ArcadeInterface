@@ -1,4 +1,5 @@
-#pragma once
+#ifndef LOADER_INCLUDED
+#define LOADER_INCLUDED
 #include "TileGrid.h"
 #include "const.h"
 #include "UIConfig.h"
@@ -725,3 +726,4 @@ void inline loadUIProperties(UIConfig * c)
 		printf("Done -Loading config data.\n\n\n");
 	}
 }
+#endif

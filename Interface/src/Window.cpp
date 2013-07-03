@@ -148,9 +148,6 @@ namespace window
 		// If there is no window we don't need to render anything.
 		if(glutGetWindow() == 0) return;
 
-		// Update the FPS at the titlebar of the window.
-		//updateFPS();
-
 		// Blank the screen.
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef APP_CONSTANTS_INCLUDED
+#define APP_CONSTANTS_INCLUDED
 
 /*
 These definitions are the names of the attributes in the UI 
@@ -87,3 +88,5 @@ Stay safe and don't fuck with either.
 #define SDK_F_ATTR			"fast_shutdown_key"
 #define NEXT_ATTR			"next_config_key"
 #define PREV_ATTR			"prev_config_key"
+
+#endif

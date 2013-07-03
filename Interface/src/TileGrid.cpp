@@ -157,7 +157,6 @@ Renders the Tile grid.
 */
 void TileGrid::render(void)
 {
-	int rendered = 0;
 	// Go through all the Tiles...
 	for(unsigned int i = 0; i < layers[curLayer]->size(); i ++)
 	{
@@ -174,12 +173,8 @@ void TileGrid::render(void)
 		else
 		{
 			layers[curLayer]->at(i)->render();
-			rendered ++;
 		}
 	}
-	char titleString[25];
-	sprintf(titleString, "Tiles rendered: %4d", rendered);
-	glutSetWindowTitle(titleString);
 	handleAnimation();
 }
 

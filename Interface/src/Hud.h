@@ -1,4 +1,5 @@
-#pragma once
+#ifndef HUD_INCLUDED
+#define HUD_INCLUDED
 #include "Shaders.h"
 #include "GLTexture.h"
 #include "const.h"
@@ -87,4 +88,4 @@ private:
 	*/
 	void destroyBuffers(void);
 };
-
+#endif

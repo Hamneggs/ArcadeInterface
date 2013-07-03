@@ -1,4 +1,5 @@
-#pragma once
+#ifndef KEYBOARD_INCLUDED
+#define KEYBOARD_INCLUDED
 #include <vector>
 #include "UIConfig.h"
 #include "TileGrid.h"
@@ -66,3 +67,4 @@ namespace input
 	*/
 	void specialReleased(int key, int x, int y);
 };
+#endif

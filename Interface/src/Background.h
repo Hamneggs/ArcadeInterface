@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BACKGROUND_INCLUDED
+#define BACKGROUND_INCLUDED
 #include "TileGrid.h"
 #include "UIConfig.h"
 
@@ -62,4 +63,5 @@ private:
 	void destroyBuffers(void);
 
 };
+#endif
 

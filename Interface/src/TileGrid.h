@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TILE_GRID_INCLUDED
+#define TILE_GRID_INCLUDED
 #include <vector>
 #include "Tile.h"
 #include "const.h"
@@ -184,4 +185,4 @@ private:
 	*/
 	void changeTilesLocation(float changeX, float changeY);
 };
-
+#endif

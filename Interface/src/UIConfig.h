@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CONFIG_INCLUDED
+#define CONFIG_INCLUDED
 #include <vector>
 struct UIConfig
 {
@@ -156,3 +157,4 @@ void inline printConfig(UIConfig * c)
 	printf("Next Config: %s\n", &c->n_cfg);
 	printf("Previous Config: %s\n", &c->p_cfg);
 }
+#endif

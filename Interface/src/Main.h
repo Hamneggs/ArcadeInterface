@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MAIN_INCLUDED
+#define MAIN_INCLUDED
 #define GLEW_STATIC
 #include <stdio.h>
 #include "Window.h"
@@ -8,4 +9,4 @@
 #include "TileGrid.h"
 #include "SFX.h"
 int main(int argc, char * argv[]);
-
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SOUND_INCLUDED
+#define SOUND_INCLUDED
 #include "irrKlang.h"
 #include "UIConfig.h"
 
@@ -36,3 +37,4 @@ namespace audio
 	*/
 	void playRejection(void);
 }
+#endif
