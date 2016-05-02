@@ -15,7 +15,7 @@ Features
 
 Tile Customization
 =============
-<b>An editor is included to construct tile layouts.<b> 
+An editor is included to construct tile layouts.
 Each Tile has the following properties that can be modified.
 * Location, highlighted and un-highlighted sizes.
 * Whether or not it has a standard frame, is the first tile selected on startup, or if can be selected by the
