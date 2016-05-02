@@ -1,4 +1,4 @@
-ArcadeInterface
+Arcade Interface
 ===============
 
 A graphical user interface that allows a user to easily select a game on a multi-cade.
